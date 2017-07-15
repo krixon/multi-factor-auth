@@ -1,0 +1,25 @@
+{
+  "name": "krixon/multi-factor-auth",
+  "description": "Multi-factor authentication library for PHP7",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Karl Rixon",
+      "email": "karlrixon@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Krixon\\MultiFactorAuth\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Krixon\\MultiFactorAuthTests\\": "tests"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.2"
+  }
+}
