@@ -108,7 +108,4 @@ abstract class Data
 
         $this->issuer = $issuer;
     }
-
-
-
 }
