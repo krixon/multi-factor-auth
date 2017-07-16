@@ -10,8 +10,8 @@ A library for generating and verifying the codes used in multi-factor authentica
 
 Features:
 
-- Time-based (TOTP) code generation and verification.
-- Event-based (HOTP) code generation and verification.
+- Time-based ([TOTP](https://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm)) code generation and verification.
+- Event-based ([HOTP](https://en.wikipedia.org/wiki/HMAC-based_One-time_Password_Algorithm)) code generation and verification.
 - Barcode generation for easy client setup.
 
 This library implements the following RFCs:
@@ -66,6 +66,10 @@ and secure defaults. The only thing you need to provide is an "issuer" string. T
 identifies the provider or service managing a user's account - i.e. your application.
 
 ```php
+<?php
+
+use Krixon\MultiFactorAuth\MultiFactorAuth;
+
 $mfa = MultiFactorAuth::default('Example Issuer');
 ```
 
@@ -108,6 +112,35 @@ If the code is verified successfully, the secret can be securely persisted on th
 From now on, when the user authenticates they should be prompted to enter a code along with their other credentials
 such as username and password. This code should be verified using the stored shared secret and authentication denied
 if verification fails.
+
+# Generating Backup Codes
+
+If a user loses their device or otherwise cannot generate codes, you can allow them to login via a pre-generated
+backup code. Event-based ([HOTP](https://en.wikipedia.org/wiki/HMAC-based_One-time_Password_Algorithm)) codes are
+perfect for this.
+
+The following example generates 10 backup codes which the user can write down or otherwise store.
+
+```php
+use Krixon\MultiFactorAuth\Codec\Base32Codec;
+use Krixon\MultiFactorAuth\MultiFactorAuth;
+
+$mfa     = MultiFactorAuth::default('Test Issuer');
+$secret  = (new Base32Codec())->encode('12345678901234567890');
+$counter = 42; // TODO: Retrieve the real counter from the DB or wherever it is stored.
+
+// $codes is an array of Code objects.
+$codes  = $mfa->generateBackupCodes($secret, $counter, 10);
+
+foreach ($codes as $code) {
+    // Do something with the backup code.
+    $code->toString();  // zero-padded 6-digit code.
+    $code->toString(8); // zero-padded 8-digit code.
+    $code->toHex();     // Hexadecimal representation of the 31 bit value.
+    $code->toDecimal(); // Decimal representation of the 31 bit value.
+    $code->toBinary();  // 31 bits of binary data.
+}
+```
 
 # Sandbox
 

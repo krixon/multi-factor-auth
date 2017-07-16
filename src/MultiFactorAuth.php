@@ -106,6 +106,33 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
     }
 
 
+    /**
+     * Generates a specified number of backup codes.
+     *
+     * This is just a convenient way to generate multiple event-based codes at once.
+     *
+     * The generated codes (or the counter position and offset) can be stored server-side. The user can record the
+     * codes, for example by writing them down on paper or entering them into a password manager. The server can
+     * then check against any of these codes (in addition to the current code) during the verification process.
+     *
+     * @param string $secret
+     * @param int    $counter
+     * @param int    $numCodes
+     *
+     * @return Code[]
+     */
+    public function generateBackupCodes(string $secret, int $counter, int $numCodes = 10) : array
+    {
+        $codes = [];
+
+        while ($numCodes--) {
+            $codes[] = $this->generateEventBasedCode($secret, $counter++);
+        }
+
+        return $codes;
+    }
+
+
     public function verifyEventBasedCode(string $code, string $secret, int $counter) : bool
     {
         return $this->codeVerifier->verifyEventBasedCode($code, $secret, $counter);
