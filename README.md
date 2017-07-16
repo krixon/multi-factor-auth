@@ -1,7 +1,18 @@
 Multi Factor Authentication
 ===========================
 
+[![Build Status](https://travis-ci.org/krixon/multi-factor-auth.svg?branch=master)](https://travis-ci.org/krixon/multi-factor-auth)
+[![Coverage Status](https://coveralls.io/repos/github/krixon/multi-factor-auth/badge.svg?branch=master)](https://coveralls.io/github/krixon/multi-factor-auth?branch=master)
+
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/cd22d4e6-4409-4491-9e6f-56cdf7bf8964/big.png)](https://insight.sensiolabs.com/projects/cd22d4e6-4409-4491-9e6f-56cdf7bf8964)
+
 A library for generating and verifying the codes used in multi-factor authentication systems.
+
+Features:
+
+- Time-based (TOTP) code generation and verification.
+- Event-based (HOTP) code generation and verification.
+- Barcode generation for easy client setup.
 
 This library implements the following RFCs:
 
@@ -10,7 +21,8 @@ This library implements the following RFCs:
 
 It has been tested against the following multi-factor authentication tools:
 
-- [Google Authenticator](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2) (TTOP + HTOP)
+- [Google Authenticator](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2) (TOTP + HOTP)
+- [Authy](https://authy.com/) (TOTP + HOTP)
 
 # Prerequisites
 
