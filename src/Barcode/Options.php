@@ -4,6 +4,9 @@ namespace Krixon\MultiFactorAuth\Barcode;
 
 class Options
 {
+    public const DEFAULT_WIDTH  = 200;
+    public const DEFAULT_HEIGHT = 200;
+
     private $foregroundColor;
     private $backgroundColor;
     private $width;
@@ -196,5 +199,52 @@ class Options
         $instance->format = $format;
 
         return $instance;
+    }
+
+
+    /**
+     * Unions the options in this instance with those in another instance.
+     *
+     * If this instance has a value for an option it will be retained and the value from $other will be discarded.
+     *
+     * Note that a new third instance is returned containing the result; neither this instance or $other is modified.
+     *
+     * @param Options $other
+     *
+     * @return Options
+     */
+    public function union(self $other) : self
+    {
+        return new static(
+            $this->width                ?? $other->width,
+            $this->height               ?? $other->height,
+            $this->format               ?? $other->format,
+            $this->margin               ?? $other->margin,
+            $this->errorCorrectionLevel ?? $other->errorCorrectionLevel,
+            $this->foregroundColor      ?? $other->foregroundColor,
+            $this->backgroundColor      ?? $other->backgroundColor,
+            $this->sourceCharset        ?? $other->sourceCharset
+        );
+    }
+
+
+    public function equals(self $other) : bool
+    {
+        if ($this === $other) {
+            return true;
+        }
+
+        if (!$other instanceof static) {
+            return false;
+        }
+
+        return $other->width                === $this->width
+            && $other->height               === $this->height
+            && $other->format               === $this->format
+            && $other->margin               === $this->margin
+            && $other->errorCorrectionLevel === $this->errorCorrectionLevel
+            && $other->foregroundColor      === $this->foregroundColor
+            && $other->backgroundColor      === $this->backgroundColor
+            && $other->sourceCharset        === $this->sourceCharset;
     }
 }
