@@ -135,28 +135,6 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
 
 
     /**
-     * Generates backup codes corresponding to a set of supplied counter values.
-     *
-     * This is just a convenience over calling generateEventBasedCode() in a loop.
-     *
-     * @param string $secret
-     * @param int[]  ...$counters
-     *
-     * @return Code[]
-     */
-    public function generateBackupCodesForCounters(string $secret, int ...$counters) : array
-    {
-        $codes = [];
-
-        foreach ($counters as $counter) {
-            $codes[$counter] = $this->generateEventBasedCode($secret, $counter);
-        }
-
-        return $codes;
-    }
-
-
-    /**
      * Synchronizes the counter value based on a supplied code.
      *
      * Because codes are only incremented on the server after successful verification but can be incremented on the
