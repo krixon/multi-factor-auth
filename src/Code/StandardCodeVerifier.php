@@ -28,7 +28,7 @@ class StandardCodeVerifier implements CodeVerifier
     }
 
 
-    public function verifyEventBasedCode(string $code, string $secret, int $counter) : bool
+    public function verifyEventBasedCode(string $secret, string $code, int $counter) : bool
     {
         $codeLength = strlen($code);
         $codeObj    = $this->codeGenerator->generateEventBasedCode($secret, $counter);
@@ -38,7 +38,7 @@ class StandardCodeVerifier implements CodeVerifier
     }
 
 
-    public function verifyTimeBasedCode(string $code, string $secret) : bool
+    public function verifyTimeBasedCode(string $secret, string $code) : bool
     {
         $result     = false;
         $times      = $this->clock()->times(null, $this->maxWindowOffset);

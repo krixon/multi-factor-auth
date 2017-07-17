@@ -28,7 +28,7 @@ class SuccessfulMultiFactorAuthTest extends TestCase
 
         static::assertInstanceOf(Code::class, $code);
         static::assertRegExp('/\d{' . $codeLength . '}/', $codeString);
-        static::assertTrue($mfa->verifyTimeBasedCode($codeString, $secret));
+        static::assertTrue($mfa->verifyTimeBasedCode($secret, $codeString));
 
         // Can we use the secret to generate valid event-based codes?
         $counter    = 0;
@@ -37,6 +37,6 @@ class SuccessfulMultiFactorAuthTest extends TestCase
 
         static::assertInstanceOf(Code::class, $code);
         static::assertRegExp('/\d{' . $codeLength . '}/', $codeString);
-        static::assertTrue($mfa->verifyEventBasedCode($codeString, $secret, $counter));
+        static::assertTrue($mfa->verifyEventBasedCode($secret, $codeString, $counter));
     }
 }

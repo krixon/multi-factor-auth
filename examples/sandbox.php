@@ -93,9 +93,9 @@ $eventBasedQr = $mfa->generateEventBasedBarcode($_SESSION['secret'], $accountNam
 $result       = null;
 
 if (isset($_REQUEST['time_code'])) {
-    $result = $mfa->verifyTimeBasedCode($_REQUEST['time_code'], $_SESSION['secret']);
+    $result = $mfa->verifyTimeBasedCode($_SESSION['secret'], $_REQUEST['time_code']);
 } elseif (isset($_REQUEST['event_code'])) {
-    $result = $mfa->verifyEventBasedCode($_REQUEST['event_code'], $_SESSION['secret'], $_SESSION['counter']);
+    $result = $mfa->verifyEventBasedCode($_SESSION['secret'], $_REQUEST['event_code'], $_SESSION['counter']);
     if ($result) {
         ++$_SESSION['counter'];
     }

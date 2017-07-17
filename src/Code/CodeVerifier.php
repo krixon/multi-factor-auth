@@ -4,6 +4,6 @@ namespace Krixon\MultiFactorAuth\Code;
 
 interface CodeVerifier
 {
-    public function verifyEventBasedCode(string $code, string $secret, int $counter) : bool;
-    public function verifyTimeBasedCode(string $code, string $secret) : bool;
+    public function verifyEventBasedCode(string $secret, string $code, int $counter) : bool;
+    public function verifyTimeBasedCode(string $secret, string $code) : bool;
 }

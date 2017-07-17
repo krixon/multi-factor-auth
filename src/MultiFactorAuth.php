@@ -155,15 +155,15 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
     }
 
 
-    public function verifyEventBasedCode(string $code, string $secret, int $counter) : bool
+    public function verifyEventBasedCode(string $secret, string $code, int $counter) : bool
     {
-        return $this->codeVerifier->verifyEventBasedCode($code, $secret, $counter);
+        return $this->codeVerifier->verifyEventBasedCode($secret, $code, $counter);
     }
 
 
-    public function verifyTimeBasedCode(string $code, string $secret) : bool
+    public function verifyTimeBasedCode(string $secret, string $code) : bool
     {
-        return $this->codeVerifier->verifyTimeBasedCode($code, $secret);
+        return $this->codeVerifier->verifyTimeBasedCode($secret, $code);
     }
 
 
