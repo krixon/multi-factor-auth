@@ -3,6 +3,7 @@
 namespace Krixon\MultiFactorAuthTests\Functional;
 
 use Krixon\MultiFactorAuth\Code\Code;
+use Krixon\MultiFactorAuth\Codec\Base32Codec;
 use Krixon\MultiFactorAuth\MultiFactorAuth;
 use Krixon\MultiFactorAuthTests\TestCase;
 
@@ -17,10 +18,11 @@ class SuccessfulMultiFactorAuthTest extends TestCase
     private function runTests(MultiFactorAuth $mfa, $secretBitCount = 160, $codeLength = 6)
     {
         // Can we generate a valid, 160bit secret?
-        $secret = $mfa->generateSecret();
+        $secret    = $mfa->generateSecret();
+        $rawSecret = (new Base32Codec())->decode($secret);
 
         static::assertInternalType('string', $secret);
-        static::assertBitCountGreaterThanOrEqualTo($secretBitCount, $secret);
+        static::assertBitCountGreaterThanOrEqualTo($secretBitCount, $rawSecret);
 
         // Can we use the secret to generate valid time-based codes?
         $code       = $mfa->generateTimeBasedCode($secret);
