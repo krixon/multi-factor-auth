@@ -11,16 +11,9 @@ class Code
     private $hex;
 
 
-    public function __construct(string $hash)
+    public function __construct(int $decimal)
     {
-        $offset = ord(substr($hash, -1)) & 0xF;
-
-        $this->decimal = (
-            ((ord($hash[$offset])     & 0x7F) << 24) |
-            ((ord($hash[$offset + 1]) & 0xFF) << 16) |
-            ((ord($hash[$offset + 2]) & 0xFF) <<  8) |
-            ( ord($hash[$offset + 3]) & 0xFF)
-        );
+        $this->decimal = $decimal;
     }
 
 

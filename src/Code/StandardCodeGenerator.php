@@ -70,7 +70,15 @@ class StandardCodeGenerator implements CodeGenerator
         $secret = $this->codec->decode($secret);
         $bytes  = "\0\0\0\0" . pack('N*', $factor);
         $hash   = $this->hasher->hash($bytes, $secret, $algorithm);
+        $offset = ord(substr($hash, -1)) & 0xF;
 
-        return new Code($hash);
+        $decimal = (
+            ((ord($hash[$offset])     & 0x7F) << 24) |
+            ((ord($hash[$offset + 1]) & 0xFF) << 16) |
+            ((ord($hash[$offset + 2]) & 0xFF) <<  8) |
+            ( ord($hash[$offset + 3]) & 0xFF)
+        );
+
+        return new Code($decimal);
     }
 }
