@@ -155,6 +155,46 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
     }
 
 
+    /**
+     * Synchronizes the counter value based on a supplied code.
+     *
+     * Because codes are only incremented on the server after successful verification but can be incremented on the
+     * client without ever being verified by the server, it is possible for the client's counter to get ahead of
+     * the server's.
+     *
+     * This method provides a mechanism for detecting and resolving this situation. Given the latest code from the
+     * client and the server's current counter, it will attempt to verify the current code plus a number of future
+     * codes. If any is verified successfully, the corresponding counter value is returned. The server can then store
+     * this updated counter to resynchronize with the client.
+     *
+     * For example, if the server's counter is 20 and the supplied code corresponds to a counter value of 23,
+     * this method will return 23.
+     *
+     * The lookahead parameter defines the number of codes in addition to the current code which will be checked.
+     * With a lookahead of 10, this means 11 codes in total will be checked (the current one plus the following 10).
+     * A lower lookahead value is more secure but is less likely to result in successful resynchronization.
+     *
+     * @param string $secret
+     * @param string $code
+     * @param int    $counter
+     * @param int    $lookahead
+     *
+     * @return int
+     */
+    public function synchronizeCounter(string $secret, string $code, int $counter, int $lookahead = 10) : int
+    {
+        $candidates = $this->generateBackupCodes($secret, $counter, $lookahead + 1);
+
+        foreach ($candidates as $offset => $candidate) {
+            if ($candidate->equalsString($code)) {
+                return $counter + $offset;
+            }
+        }
+
+        throw new Exception\CounterSynchronizationFailed($counter, $code, $lookahead, $counter + $lookahead);
+    }
+
+
     public function verifyEventBasedCode(string $secret, string $code, int $counter) : bool
     {
         return $this->codeVerifier->verifyEventBasedCode($secret, $code, $counter);
