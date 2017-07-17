@@ -38,6 +38,8 @@ class MultiFactorAuthTest extends TestCase
 
         $actualCodes = $mfa->generateBackupCodes($secret, $initialCounter, $numCodes);
 
+        static::assertCount($numCodes, $actualCodes);
+
         foreach ($expectedCodes as $i => $expectedCode) {
             static::assertSame($expectedCode, $actualCodes[$i]->toString($length));
         }
@@ -52,4 +54,41 @@ class MultiFactorAuthTest extends TestCase
         ];
     }
 
+
+    /**
+     * @dataProvider valueCodesForCountersProvider
+     *
+     * @param array $expectedCodes
+     * @param int   $length
+     */
+    public function testGeneratesExpectedBackupCodesForCounters(array $expectedCodes, int $length = 6)
+    {
+        $mfa    = MultiFactorAuth::default('Test Issuer');
+        $secret = static::$codec->encode('12345678901234567890');
+
+        $actualCodes = $mfa->generateBackupCodesForCounters($secret, ...array_keys($expectedCodes));
+
+        static::assertCount(count($expectedCodes), $actualCodes);
+
+        foreach ($expectedCodes as $i => $expectedCode) {
+            static::assertSame($expectedCode, $actualCodes[$i]->toString($length));
+        }
+    }
+
+
+    public function valueCodesForCountersProvider()
+    {
+        return [
+            [[
+                0 => '755224', 1 => '287082', 2 => '359152', 3 => '969429', 4 => '338314',
+                5 => '254676', 6 => '287922', 7 => '162583', 8 => '399871', 9 => '520489',
+            ]],
+            [[0 => '755224', 2 => '359152', 4 => '338314', 6 => '287922', 8 => '399871']],
+            [[1 => '287082', 3 => '969429', 5 => '254676', 7 => '162583', 9 => '520489']],
+            [[]],
+            [[0 => '755224']],
+            [[9 => '520489']],
+            [[0 => '755224', 9 => '520489']],
+        ];
+    }
 }
