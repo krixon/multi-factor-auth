@@ -107,13 +107,14 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
 
 
     /**
-     * Generates a specified number of backup codes.
+     * Generates a specified number of event-based codes.
      *
      * This is just a convenient way to generate multiple event-based codes at once.
      *
-     * The generated codes (or the counter position and offset) can be stored server-side. The user can record the
-     * codes, for example by writing them down on paper or entering them into a password manager. The server can
-     * then check against any of these codes (in addition to the current code) during the verification process.
+     * This is useful as part of a "backup codes" system. The generated codes can be stored server-side (salted
+     * and hashed). The user can record the codes, for example by writing them down on paper or entering them into a
+     * password manager. The server can then check against any of these codes (in addition to the current code)
+     * during the verification process.
      *
      * @param string $secret
      * @param int    $counter
@@ -121,7 +122,7 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
      *
      * @return Code[]
      */
-    public function generateBackupCodes(string $secret, int $counter, int $numCodes = 10) : array
+    public function generateEventBasedCodes(string $secret, int $counter, int $numCodes = 10) : array
     {
         $codes = [];
 
@@ -183,7 +184,7 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
      */
     public function synchronizeCounter(string $secret, string $code, int $counter, int $lookahead = 10) : int
     {
-        $candidates = $this->generateBackupCodes($secret, $counter, $lookahead + 1);
+        $candidates = $this->generateEventBasedCodes($secret, $counter, $lookahead + 1);
 
         foreach ($candidates as $offset => $candidate) {
             if ($candidate->equalsString($code)) {

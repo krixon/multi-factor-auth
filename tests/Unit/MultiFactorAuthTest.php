@@ -2,7 +2,6 @@
 
 namespace Krixon\MultiFactorAuthTests\Unit;
 
-use Krixon\MultiFactorAuth\Code\Code;
 use Krixon\MultiFactorAuth\Codec\Base32Codec;
 use Krixon\MultiFactorAuth\Codec\Codec;
 use Krixon\MultiFactorAuth\Exception\CounterSynchronizationFailed;
@@ -32,13 +31,13 @@ class MultiFactorAuthTest extends TestCase
      * @param int   $initialCounter
      * @param int   $length
      */
-    public function testGeneratesExpectedBackupCodes(array $expectedCodes, int $initialCounter = 0, int $length = 6)
+    public function testGeneratesExpectedEventBasedCodes(array $expectedCodes, int $initialCounter = 0, int $length = 6)
     {
         $mfa      = MultiFactorAuth::default('Test Issuer');
         $secret   = static::$codec->encode('12345678901234567890');
         $numCodes = count($expectedCodes);
 
-        $actualCodes = $mfa->generateBackupCodes($secret, $initialCounter, $numCodes);
+        $actualCodes = $mfa->generateEventBasedCodes($secret, $initialCounter, $numCodes);
 
         static::assertCount($numCodes, $actualCodes);
 
