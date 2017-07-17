@@ -51,6 +51,19 @@ class Code
     }
 
 
+    /**
+     * Determines if a string is a valid representation of this code.
+     *
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function equalsString(string $code) : bool
+    {
+        return $this->toString(strlen($code)) === $code;
+    }
+
+
     public function __toString()
     {
         return $this->toString();
