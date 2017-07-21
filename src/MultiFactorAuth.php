@@ -16,8 +16,7 @@ use Krixon\MultiFactorAuth\Code\CodeVerifier;
 use Krixon\MultiFactorAuth\Code\StandardCodeGenerator;
 use Krixon\MultiFactorAuth\Code\StandardCodeVerifier;
 use Krixon\MultiFactorAuth\HTTP\CurlClient;
-use Krixon\MultiFactorAuth\Random\RandomBytes;
-use Krixon\MultiFactorAuth\Secret\RNGSecretGenerator;
+use Krixon\MultiFactorAuth\Secret\RandomBytesSecretGenerator;
 use Krixon\MultiFactorAuth\Secret\SecretGenerator;
 
 class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, BarcodeGenerator
@@ -49,7 +48,7 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
 
     public static function default(string $issuer)
     {
-        $secretGenerator  = new RNGSecretGenerator(new RandomBytes());
+        $secretGenerator  = new RandomBytesSecretGenerator();
         $codeGenerator    = new StandardCodeGenerator();
         $verifier         = new StandardCodeVerifier($codeGenerator);
         $barcodeGenerator = new GoogleQRGenerator(new CurlClient());
@@ -88,7 +87,7 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
     }
 
 
-    public function generateSecret(int $byteCount = 160) : string
+    public function generateSecret(int $byteCount = 20) : string
     {
         return $this->secretGenerator->generateSecret($byteCount);
     }

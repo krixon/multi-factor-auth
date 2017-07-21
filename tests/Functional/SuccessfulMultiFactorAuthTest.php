@@ -15,14 +15,14 @@ class SuccessfulMultiFactorAuthTest extends TestCase
     }
 
 
-    private function runTests(MultiFactorAuth $mfa, $secretBitCount = 20, $codeLength = 6)
+    private function runTests(MultiFactorAuth $mfa, $secretByteCount = 20, $codeLength = 6)
     {
-        // Can we generate a valid, 160bit secret?
+        // Can we generate a valid, 20B (160b) secret?
         $secret    = $mfa->generateSecret();
         $rawSecret = (new Base32Codec())->decode($secret);
 
         static::assertInternalType('string', $secret);
-        static::assertByteCountGreaterThanOrEqualTo($secretBitCount, $rawSecret);
+        static::assertByteCountGreaterThanOrEqualTo($secretByteCount, $rawSecret);
 
         // Can we use the secret to generate valid time-based codes?
         $code       = $mfa->generateTimeBasedCode($secret);
