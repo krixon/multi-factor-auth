@@ -36,7 +36,7 @@ class StandardCodeGenerator implements CodeGenerator
     ) {
         $this->clock     = $clock     ?: new SystemClock();
         $this->hasher    = $hasher    ?: new HashHMACHasher();
-        $this->algorithm = $algorithm ?: Algorithm::SHA1();
+        $this->algorithm = $algorithm ?: Algorithm::sha1();
         $this->codec     = $codec     ?: new Base32Codec();
     }
 
@@ -51,7 +51,7 @@ class StandardCodeGenerator implements CodeGenerator
 
     public function generateEventBasedCode(string $secret, int $counter) : Code
     {
-        return $this->generateCode($secret, $counter, Algorithm::SHA1());
+        return $this->generateCode($secret, $counter, Algorithm::sha1());
     }
 
 

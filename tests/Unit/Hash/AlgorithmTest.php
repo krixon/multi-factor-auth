@@ -10,9 +10,9 @@ class AlgorithmTest extends TestCase
 {
     public function testStaticFactoriesConstructExpectedInstances()
     {
-        static::assertSame(Algorithm::SHA1, (string)Algorithm::SHA1());
-        static::assertSame(Algorithm::SHA256, (string)Algorithm::SHA256());
-        static::assertSame(Algorithm::SHA512, (string)Algorithm::SHA512());
+        static::assertSame(Algorithm::SHA1, (string)Algorithm::sha1());
+        static::assertSame(Algorithm::SHA256, (string)Algorithm::sha256());
+        static::assertSame(Algorithm::SHA512, (string)Algorithm::sha512());
     }
 
 

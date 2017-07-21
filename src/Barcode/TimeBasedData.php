@@ -22,7 +22,7 @@ class TimeBasedData extends Data
     ) {
         parent::__construct($secret, $issuer, $accountName, $digitCount);
 
-        $this->algorithm = $algorithm ?: Algorithm::SHA1();
+        $this->algorithm = $algorithm ?: Algorithm::sha1();
 
         $this->setWindowLength($windowLength);
     }

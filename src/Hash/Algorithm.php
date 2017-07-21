@@ -27,19 +27,19 @@ final class Algorithm
     }
 
 
-    public static function SHA1() : self
+    public static function sha1() : self
     {
         return new self(self::SHA1);
     }
 
 
-    public static function SHA256() : self
+    public static function sha256() : self
     {
         return new self(self::SHA256);
     }
 
 
-    public static function SHA512() : self
+    public static function sha512() : self
     {
         return new self(self::SHA512);
     }

@@ -126,7 +126,7 @@ class GoogleQRGeneratorTest extends TestCase
             ],
             // Algorithm variations.
             [
-                $timeData->withAlgorithm(Algorithm::SHA1()),
+                $timeData->withAlgorithm(Algorithm::sha1()),
                 null,
                 [
                     'data' =>
@@ -135,7 +135,7 @@ class GoogleQRGeneratorTest extends TestCase
                 ]
             ],
             [
-                $timeData->withAlgorithm(Algorithm::SHA256()),
+                $timeData->withAlgorithm(Algorithm::sha256()),
                 null,
                 [
                     'data' =>
@@ -144,7 +144,7 @@ class GoogleQRGeneratorTest extends TestCase
                 ]
             ],
             [
-                $timeData->withAlgorithm(Algorithm::SHA512()),
+                $timeData->withAlgorithm(Algorithm::sha512()),
                 null,
                 [
                     'data' =>
