@@ -1,14 +1,27 @@
 language: php
 
 php:
-  - 7.1
+    - 7.1
+
+matrix:
+    include:
+        - php: 7.1
+          env: DEPENDENCIES=lowest
+        - php: 7.1
+          env: DEPENDENCIES=highest
+
+cache:
+    directories:
+        $HOME/.composer/cache/files
 
 install:
-    - composer install
+    - if [ -z "$DEPENDENCIES" ]; then composer install --prefer-dist; fi;
+    - if [ "$DEPENDENCIES" = "lowest" ]; then composer update --prefer-dist --prefer-lowest -n; fi;
+    - if [ "$DEPENDENCIES" = "highest" ]; then composer update --prefer-dist -n; fi;
 
 script:
-  - mkdir -p build/logs
-  - php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
+    - mkdir -p build/logs
+    - php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
 
 after_success:
-  - php vendor/bin/coveralls -v
+    - php vendor/bin/coveralls -v
