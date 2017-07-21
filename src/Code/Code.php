@@ -6,34 +6,12 @@ class Code
 {
     public const DEFAULT_DIGIT_COUNT = 6;
 
-    private $binary;
     private $decimal;
-    private $hex;
 
 
     public function __construct(int $decimal)
     {
         $this->decimal = $decimal;
-    }
-
-
-    public function toBinary() : string
-    {
-        if (null === $this->binary) {
-            $this->binary = decbin($this->decimal);
-        }
-
-        return $this->binary;
-    }
-
-
-    public function toHex() : string
-    {
-        if (null === $this->hex) {
-            $this->hex = dechex($this->decimal);
-        }
-
-        return $this->hex;
     }
 
 

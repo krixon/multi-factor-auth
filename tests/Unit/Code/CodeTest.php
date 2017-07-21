@@ -54,37 +54,6 @@ class CodeTest extends TestCase
     }
 
 
-    /**
-     * @dataProvider binaryStringProvider
-     *
-     * @param int    $code
-     * @param string $expected
-     */
-    public function testConvertsToExpectedBinaryString(int $code, string $expected)
-    {
-        static::assertSame($expected, (new Code($code))->toBinary());
-    }
-
-
-    public function binaryStringProvider()
-    {
-        return [
-            [0, '0'],
-            [1, '1'],
-            [2, '10'],
-            [3, '11'],
-            [4, '100'],
-            [5, '101'],
-            [6, '110'],
-            [7, '111'],
-            [15, '1111'],
-            [31, '11111'],
-            [3600, '111000010000'],
-            [9223372036854775807, '111111111111111111111111111111111111111111111111111111111111111'],
-        ];
-    }
-
-
     public function testCastToString()
     {
         static::assertSame('456789', (string)(new Code(123456789)));
