@@ -3,13 +3,13 @@
 namespace Krixon\MultiFactorAuthTests\Unit\Barcode;
 
 use Krixon\MultiFactorAuth\Barcode\Data;
-use Krixon\MultiFactorAuth\Barcode\GoogleQRGenerator;
+use Krixon\MultiFactorAuth\Barcode\GoQRGenerator;
 use Krixon\MultiFactorAuth\Barcode\Options;
 use Krixon\MultiFactorAuth\Barcode\TimeBasedData;
 use Krixon\MultiFactorAuth\HTTP\Client;
 use Krixon\MultiFactorAuthTests\TestCase;
 
-class GoogleQRGeneratorTest extends TestCase
+class GoQRGeneratorTest extends TestCase
 {
     /**
      * @dataProvider correctRequestProvider
@@ -26,21 +26,29 @@ class GoogleQRGeneratorTest extends TestCase
         Options $defaults = null
     ) {
         $expected += [
-            'size'   => '200x200',
-            'ec'     => 'L',
-            'margin' => 1,
-            'data'   =>
+            'size'           => '200x200',
+            'ec'             => 'L',
+            'charset-source' => 'UTF-8',
+            'format'         => 'png',
+            'color'          => 'FFFFFF',
+            'bgcolor'        => '000000',
+            'data'           =>
                 'otpauth%3A%2F%2Ftotp%2FTest%2520Issuer%253Adave.lister%2540example.com%3Fsecret%3D1234567890%26' .
                 'issuer%3DTest%2520Issuer%26digits%3D6%26period%3D30%26algorithm%3DSHA1',
         ];
 
 
         $expected = sprintf(
-            'https://chart.googleapis.com/chart?cht=qr&chs=%s&chld=%s|%d&chl=%s',
+            'https://api.qrserver.com/v1/create-qr-code/?data=%s&size=%s&charset-source=%s&ecc=%s&format=%s' .
+            '&color=%s&bgcolor=%s',
+
+            $expected['data'],
             $expected['size'],
+            $expected['charset-source'],
             $expected['ec'],
-            $expected['margin'],
-            $expected['data']
+            $expected['format'],
+            $expected['color'],
+            $expected['bgcolor']
         );
 
         $client = $this->createMock(Client::class);
@@ -52,7 +60,7 @@ class GoogleQRGeneratorTest extends TestCase
             ->willReturn(decbin('blob'));
 
         /** @noinspection PhpParamsInspection */
-        $generator = new GoogleQRGenerator($client, $defaults);
+        $generator = new GoQRGenerator($client, $defaults);
 
         $generator->generateBarcode($data, $options);
     }
@@ -81,6 +89,13 @@ class GoogleQRGeneratorTest extends TestCase
             [$timeData, $options->withErrorCorrectionLevel(''), ['ec' => 'L']],
             [$timeData, $options->withErrorCorrectionLevel('123'), ['ec' => 'L']],
             [$timeData, $options->withErrorCorrectionLevel(123), ['ec' => 'L']],
+            // Format variations.
+            [$timeData, $options->withFormat('png'), ['format' => 'png']],
+            [$timeData, $options->withFormat('gif'), ['format' => 'gif']],
+            [$timeData, $options->withFormat('jpg'), ['format' => 'jpg']],
+            [$timeData, $options->withFormat('svg'), ['format' => 'svg']],
+            [$timeData, $options->withFormat('eps'), ['format' => 'eps']],
+            [$timeData, $options->withFormat('jpeg'), ['format' => 'jpeg']],
         ];
     }
 }

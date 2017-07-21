@@ -2,10 +2,11 @@
 
 namespace Krixon\MultiFactorAuthTests\Unit\Clock;
 
-use Krixon\MultiFactorAuth\Clock\BaseClock;
+use Krixon\MultiFactorAuth\Clock\Exception\InvalidWindowLength;
+use Krixon\MultiFactorAuth\Clock\StoppedClock;
 use Krixon\MultiFactorAuthTests\TestCase;
 
-class WindowCalculatingClockTest extends TestCase
+class StoppedClockTest extends TestCase
 {
     /**
      * @dataProvider correctTimesProvider
@@ -23,7 +24,7 @@ class WindowCalculatingClockTest extends TestCase
         int $epoch,
         array $expectedTimes
     ) {
-        $clock = $this->clock($time, $windowLength, $epoch);
+        $clock = new StoppedClock($time, $windowLength, $epoch);
         $times = $clock->times($time, $offset);
 
         sort($times);
@@ -42,25 +43,10 @@ class WindowCalculatingClockTest extends TestCase
     }
 
 
-    private function clock(int $currentTime, int $windowLength, int $epoch) : BaseClock
+    public function testCannotBeConstructedWithWindowLengthLessThanZero()
     {
-        return new class($currentTime, $windowLength, $epoch) extends BaseClock
-        {
-            private $time;
+        $this->expectException(InvalidWindowLength::class);
 
-
-            public function __construct(int $time, $windowLength, $epoch)
-            {
-                parent::__construct($windowLength, $epoch);
-
-                $this->time = $time;
-            }
-
-
-            public function currentTime() : int
-            {
-                return $this->time;
-            }
-        };
+        new StoppedClock(1, -10, 0);
     }
 }

@@ -62,7 +62,7 @@ class GoQRGenerator extends HTTPGenerator
 
     private function foregroundColor(Options $options)
     {
-        return ltrim($options->foregroundColor() ?? 'FF0000', '#');
+        return ltrim($options->foregroundColor() ?? 'FFFFFF', '#');
     }
 
 

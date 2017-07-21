@@ -54,13 +54,7 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
         $verifier         = new StandardCodeVerifier($codeGenerator);
         $barcodeGenerator = new GoogleQRGenerator(new CurlClient());
 
-        return new static(
-            $issuer,
-            $secretGenerator,
-            $codeGenerator,
-            $verifier,
-            $barcodeGenerator
-        );
+        return new static($issuer, $secretGenerator, $codeGenerator, $verifier, $barcodeGenerator);
     }
 
 
@@ -192,16 +186,12 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
     }
 
 
-    public function generateTimeBasedBarcode(string $secret, string $accountName, Options $options = null)
+    public function generateTimeBasedBarcode(string $secret, string $accountName, Options $options = null) : Barcode
     {
-        $data = new TimeBasedData(
-            $secret,
-            $this->issuer,
-            $accountName,
-            $this->digitCount,
-            $this->clock()->windowLength(),
-            $this->algorithm()
-        );
+        $windowLength = $this->clock()->windowLength();
+        $algorithm    = $this->algorithm();
+
+        $data = new TimeBasedData($secret, $this->issuer, $accountName, $this->digitCount, $windowLength, $algorithm);
 
         return $this->generateBarcode($data, $options);
     }
@@ -212,14 +202,8 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
         string $accountName,
         Options $options = null,
         $counter = 0
-    ) {
-        $data = new EventBasedData(
-            $secret,
-            $this->issuer,
-            $accountName,
-            $this->digitCount,
-            $counter
-        );
+    ) : Barcode {
+        $data = new EventBasedData($secret, $this->issuer, $accountName, $this->digitCount, $counter);
 
         return $this->generateBarcode($data, $options);
     }

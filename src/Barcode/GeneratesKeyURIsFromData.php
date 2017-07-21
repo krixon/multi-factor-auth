@@ -26,18 +26,13 @@ trait GeneratesKeyURIsFromData
             ];
         } else {
             throw new Exception\InvalidData(sprintf(
-                'GoogleQRGenerator only supports TimeBasedData and EventBasedData (encountered %s)',
+                get_class($this) . ' only supports TimeBasedData and EventBasedData (encountered %s)',
                 get_class($data)
             ));
         }
 
-        /** @noinspection SpellCheckingInspection */
-        $data = sprintf(
-            'otpauth://%s/%s?%s',
-            $type,
-            $this->label($data),
-            http_build_query($parameters, '', '&', PHP_QUERY_RFC3986)
-        );
+        $queryString = http_build_query($parameters, '', '&', PHP_QUERY_RFC3986);
+        $data        = sprintf('otpauth://%s/%s?%s', $type, $this->label($data), $queryString);
 
         return rawurlencode($data);
     }
