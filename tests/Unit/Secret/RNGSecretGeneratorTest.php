@@ -15,7 +15,7 @@ class RNGSecretGeneratorTest extends TestCase
             $generator = new RNGSecretGenerator(new RandomBytes(), new PassThroughCodec());
             $secret    = $generator->generateSecret($i);
 
-            static::assertBitCount($i, $secret);
+            static::assertByteCount($i, $secret);
         }
     }
 }

@@ -19,9 +19,9 @@ class RNGSecretGenerator implements SecretGenerator
     }
 
 
-    public function generateSecret(int $bitCount = 160) : string
+    public function generateSecret(int $byteCount = 20) : string
     {
-        $secret = $this->randomNumberGenerator->generateRandomBytes($bitCount / 8);
+        $secret = $this->randomNumberGenerator->generateRandomBytes($byteCount);
 
         return $this->codec->encode($secret);
     }

@@ -88,9 +88,9 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
     }
 
 
-    public function generateSecret(int $bitCount = 160) : string
+    public function generateSecret(int $byteCount = 160) : string
     {
-        return $this->secretGenerator->generateSecret($bitCount);
+        return $this->secretGenerator->generateSecret($byteCount);
     }
 
 

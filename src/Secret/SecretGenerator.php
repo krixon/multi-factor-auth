@@ -4,5 +4,5 @@ namespace Krixon\MultiFactorAuth\Secret;
 
 interface SecretGenerator
 {
-    public function generateSecret(int $bitCount = 160) : string;
+    public function generateSecret(int $byteCount = 160) : string;
 }
