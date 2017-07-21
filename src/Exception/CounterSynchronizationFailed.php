@@ -6,16 +6,10 @@ class CounterSynchronizationFailed extends \RuntimeException implements MultiFac
 {
     public function __construct(int $counter, string $code, int $lookahead, int $maxCounter)
     {
-        $message = sprintf(
-            "Counter %d could not be synchronized using code %s and a lookahead of %d: Perhaps the client's" .
-            " counter is further ahead than the maximum tested counter value of %d?",
+        $pattern =
+            "Counter %d could not be synchronized using code %s and a lookahead of %d: Perhaps the client's " .
+            "counter is further ahead than the maximum tested counter value of %d?";
 
-            $counter,
-            $code,
-            $lookahead,
-            $maxCounter
-        );
-
-        parent::__construct($message);
+        parent::__construct(sprintf($pattern, $counter, $code, $lookahead, $maxCounter));
     }
 }

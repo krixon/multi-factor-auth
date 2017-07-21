@@ -3,6 +3,7 @@
 namespace Krixon\MultiFactorAuthTests\Unit\Codec;
 
 use Krixon\MultiFactorAuth\Codec\Base32Codec;
+use Krixon\MultiFactorAuth\Codec\Exception\DecodingFailed;
 use Krixon\MultiFactorAuthTests\TestCase;
 
 class Base32CodecTest extends TestCase
@@ -25,6 +26,9 @@ class Base32CodecTest extends TestCase
     public function correctEncodingProvider()
     {
         return [
+            ['', ''],
+            ['a', 'ME======', true],
+            ['abcd', 'MFRGGZA=', true],
             ['foo', 'MZXW6'],
             ['foo', 'MZXW6===', true],
             [
@@ -71,5 +75,13 @@ class Base32CodecTest extends TestCase
             }
             return array_reverse($args);
         }, $this->correctEncodingProvider());
+    }
+
+
+    public function testThrowsExpectedExceptionWhenDecodingInvalidBase32Data()
+    {
+        $this->expectException(DecodingFailed::class);
+
+        (new Base32Codec())->decode('a');
     }
 }
