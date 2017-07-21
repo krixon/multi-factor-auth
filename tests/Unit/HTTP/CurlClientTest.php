@@ -18,7 +18,7 @@ class CurlClientTest extends TestCase
 
         $curlExec->expects($this->any())->willReturn($expectedData);
 
-        $client     = new CurlClient(false);
+        $client     = new CurlClient();
         $actualData = $client->get('http://example.com');
 
         static::assertSame($expectedData, $actualData);

@@ -4,32 +4,23 @@ namespace Krixon\MultiFactorAuth\HTTP;
 
 class CurlClient implements Client
 {
-    private $verify;
-
-
-    public function __construct(bool $verifySSL = true)
-    {
-        $this->verify = $verifySSL;
-    }
-
-
     public function get(string $url) : string
     {
-        $ch = curl_init();
+        $curl = curl_init();
 
-        curl_setopt_array($ch, [
+        curl_setopt_array($curl, [
             CURLOPT_URL               => $url,
             CURLOPT_RETURNTRANSFER    => true,
             CURLOPT_CONNECTTIMEOUT    => 10,
             CURLOPT_DNS_CACHE_TIMEOUT => 10,
             CURLOPT_TIMEOUT           => 10,
-            CURLOPT_SSL_VERIFYPEER    => $this->verify,
+            CURLOPT_SSL_VERIFYPEER    => true,
             CURLOPT_USERAGENT         => 'KrixonMultiFactorAuth',
         ]);
 
-        $data = curl_exec($ch);
+        $data = curl_exec($curl);
 
-        curl_close($ch);
+        curl_close($curl);
 
         return $data;
     }
