@@ -3,6 +3,7 @@ Multi Factor Authentication
 
 [![Build Status](https://travis-ci.org/krixon/multi-factor-auth.svg?branch=master)](https://travis-ci.org/krixon/multi-factor-auth)
 [![Coverage Status](https://coveralls.io/repos/github/krixon/multi-factor-auth/badge.svg?branch=master)](https://coveralls.io/github/krixon/multi-factor-auth?branch=master)
+[![Code Climate](https://codeclimate.com/github/krixon/multi-factor-auth/badges/gpa.svg)](https://codeclimate.com/github/krixon/multi-factor-auth)
 [![Latest Stable Version](https://poser.pugx.org/krixon/multi-factor-auth/v/stable)](https://packagist.org/packages/krixon/multi-factor-auth)
 [![Latest Unstable Version](https://poser.pugx.org/krixon/multi-factor-auth/v/unstable)](https://packagist.org/packages/krixon/multi-factor-auth)
 [![License](https://poser.pugx.org/krixon/multi-factor-auth/license)](https://packagist.org/packages/krixon/multi-factor-auth)
