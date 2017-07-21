@@ -4,5 +4,5 @@ namespace Krixon\MultiFactorAuth\Hash;
 
 interface AlgorithmProvider
 {
-    public function algorithm() : string;
+    public function algorithm() : Algorithm;
 }

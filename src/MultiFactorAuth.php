@@ -15,6 +15,7 @@ use Krixon\MultiFactorAuth\Code\CodeGenerator;
 use Krixon\MultiFactorAuth\Code\CodeVerifier;
 use Krixon\MultiFactorAuth\Code\StandardCodeGenerator;
 use Krixon\MultiFactorAuth\Code\StandardCodeVerifier;
+use Krixon\MultiFactorAuth\Hash\Algorithm;
 use Krixon\MultiFactorAuth\HTTP\CurlClient;
 use Krixon\MultiFactorAuth\Secret\RandomBytesSecretGenerator;
 use Krixon\MultiFactorAuth\Secret\SecretGenerator;
@@ -224,7 +225,7 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
     }
 
 
-    public function algorithm() : string
+    public function algorithm() : Algorithm
     {
         return $this->codeGenerator->algorithm();
     }

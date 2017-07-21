@@ -5,7 +5,6 @@ namespace Krixon\MultiFactorAuth\Barcode;
 use Krixon\MultiFactorAuth\Clock\Clock;
 use Krixon\MultiFactorAuth\Code\Code;
 use Krixon\MultiFactorAuth\Hash\Algorithm;
-use Krixon\MultiFactorAuth\Hash\Exception\UnsupportedAlgorithm;
 
 class TimeBasedData extends Data
 {
@@ -19,12 +18,13 @@ class TimeBasedData extends Data
         string $accountName,
         int $digitCount = Code::DEFAULT_DIGIT_COUNT,
         int $windowLength = Clock::DEFAULT_WINDOW_LENGTH,
-        string $algorithm = Algorithm::SHA1
+        Algorithm $algorithm = null
     ) {
         parent::__construct($secret, $issuer, $accountName, $digitCount);
 
+        $this->algorithm = $algorithm ?: Algorithm::SHA1();
+
         $this->setWindowLength($windowLength);
-        $this->setAlgorithm($algorithm);
     }
 
 
@@ -44,17 +44,17 @@ class TimeBasedData extends Data
     }
 
 
-    public function algorithm() : string
+    public function algorithm() : Algorithm
     {
         return $this->algorithm;
     }
 
 
-    public function withAlgorithm(string $algorithm)
+    public function withAlgorithm(Algorithm $algorithm)
     {
         $instance = clone $this;
 
-        $instance->setAlgorithm($algorithm);
+        $instance->algorithm = $algorithm;
 
         return $instance;
     }
@@ -67,17 +67,5 @@ class TimeBasedData extends Data
         }
 
         $this->windowLength = $windowLength;
-    }
-
-
-    private function setAlgorithm(string $algorithm) : void
-    {
-        try {
-            Algorithm::assertSupported($algorithm);
-        } catch (UnsupportedAlgorithm $e) {
-            throw new Exception\InvalidData('Unsupported algorithm', $e);
-        }
-
-        $this->algorithm = $algorithm;
     }
 }

@@ -4,9 +4,9 @@ namespace Krixon\MultiFactorAuth\Hash;
 
 class HashHMACHasher implements Hasher
 {
-    public function hash(string $value, string $key, string $algorithm = Algorithm::SHA1) : string
+    public function hash(string $value, string $key, Algorithm $algorithm = null) : string
     {
-        Algorithm::assertSupported($algorithm);
+        $algorithm = $algorithm ?: Algorithm::SHA1();
 
         return hash_hmac($algorithm, $value, $key, true);
     }

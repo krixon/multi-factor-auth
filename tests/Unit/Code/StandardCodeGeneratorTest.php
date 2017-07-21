@@ -76,7 +76,7 @@ class StandardCodeGeneratorTest extends TestCase
         $codec     = new Base32Codec();
         $clock     = new StoppedClock($time);
         $hasher    = new HashHMACHasher();
-        $generator = new StandardCodeGenerator($clock, $hasher, $algorithm, $codec);
+        $generator = new StandardCodeGenerator($clock, $hasher, new Algorithm($algorithm), $codec);
 
         switch ($algorithm) {
             case Algorithm::SHA1:
@@ -89,7 +89,7 @@ class StandardCodeGeneratorTest extends TestCase
                 $secret = '1234567890123456789012345678901234567890123456789012345678901234';
                 break;
             default:
-                throw new \InvalidArgumentException('Unknown algorithm ' . $algorithm . '.');
+                throw new \InvalidArgumentException("Unknown algorithm '$algorithm'.");
         }
 
         $secret = $codec->encode($secret);
