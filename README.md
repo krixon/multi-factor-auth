@@ -138,11 +138,11 @@ $codes  = $mfa->generateBackupCodes($secret, $counter, 10);
 
 foreach ($codes as $code) {
     // Do something with the backup code.
+    // Generally you would salt and hash the code and store it in a database. These codes would be checked
+    // against the one entered by the user (in addition to checking the current time or event-based code).
     $code->toString();  // zero-padded 6-digit code.
     $code->toString(8); // zero-padded 8-digit code.
-    $code->toHex();     // Hexadecimal representation of the 31 bit value.
     $code->toDecimal(); // Decimal representation of the 31 bit value.
-    $code->toBinary();  // 31 bits of binary data.
 }
 ```
 
