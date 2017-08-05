@@ -12,12 +12,13 @@ interface CodeGenerator extends AlgorithmProvider, ClockProvider
      *
      * An incrementing counter is used in order to generate codes.
      *
-     * @param string $secret  The shared secret.
-     * @param int    $counter The current value of the counter.
+     * @param string $secret     The shared secret.
+     * @param int    $counter    The current value of the counter.
+     * @param int    $codeLength
      *
-     * @return Code
+     * @return string
      */
-    public function generateEventBasedCode(string $secret, int $counter) : Code;
+    public function generateEventBasedCode(string $secret, int $counter, int $codeLength = 6) : string;
 
 
     /**
@@ -28,10 +29,11 @@ interface CodeGenerator extends AlgorithmProvider, ClockProvider
      * Unlike event-based codes which are restricted to SHA-1 by the spec, time-based codes can optionally use SHA-256
      * or SHA-512 to hash the secret.
      *
-     * @param string   $secret The shared secret.
-     * @param int|null $time   The time for which to generate a code. If not supplied the current time will be used.
+     * @param string   $secret     The shared secret.
+     * @param int|null $time       The time for which to generate a code. If not supplied the current time will be used.
+     * @param int      $codeLength
      *
-     * @return Code
+     * @return string
      */
-    public function generateTimeBasedCode(string $secret, int $time = null) : Code;
+    public function generateTimeBasedCode(string $secret, int $time = null, int $codeLength = 6) : string;
 }

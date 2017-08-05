@@ -129,21 +129,54 @@ The following example generates 10 backup codes which the user can write down or
 use Krixon\MultiFactorAuth\Codec\Base32Codec;
 use Krixon\MultiFactorAuth\MultiFactorAuth;
 
-$mfa     = MultiFactorAuth::default('Test Issuer');
-$secret  = (new Base32Codec())->encode('12345678901234567890');
-$counter = 42; // TODO: Retrieve the real counter from the DB or wherever it is stored.
+$mfa = MultiFactorAuth::default('Test Issuer');
 
-// $codes is an array of Code objects.
-$codes  = $mfa->generateBackupCodes($secret, $counter, 10);
+// Secrets are expected to be in base32 by default for compatibility with Google Authenticator and similar apps.
+// It is possible to use any encoding (including none). See below for more information.
+$secret = (new Base32Codec())->encode('12345678901234567890');
+
+ // Retrieve the real counter from the DB or wherever it is stored.
+$counter = 42;
+
+// $codes is an array of 10 strings, each 6 digits long.
+$codes = $mfa->generateBackupCodes($secret, $counter, 10, 6);
 
 foreach ($codes as $code) {
     // Do something with the backup code.
     // Generally you would salt and hash the code and store it in a database. These codes would be checked
     // against the one entered by the user (in addition to checking the current time or event-based code).
-    $code->toString();  // zero-padded 6-digit code.
-    $code->toString(8); // zero-padded 8-digit code.
-    $code->toDecimal(); // Decimal representation of the 31 bit value.
+    echo "$code\n";
 }
+```
+
+# Generating Secrets
+
+By default, secrets are generated using the `RandomBytesSecretGenerator`. This generates cryptographically secure
+secrets using PHP's `random_bytes` function. If a different method is required, simply implement the
+`SecretGenerator` interface.
+
+The `RandomBytesSecretGenerator` takes a `Codec` instance which determines how generated secrets are encoded. For
+maximum compatibility with Google Authenticator and similar apps, secrets should be base32 encoded, so the
+`Base32Codec` is used if no alternative is specified.
+
+To generate a secret, either use a `SecretGenerator` directly, or use the `MultiFactorAuth` facade.
+
+```php
+$generator = new RandomBytesSecretGenerator();
+
+// Generates a base32-encoded, 20 byte random secret.
+$secret = $generator->generateSecret();
+
+// Generates a base32-encoded, 30 byte random secret.
+$secret = $generator->generateSecret(30);
+
+// Generates a raw binary, 20 byte random secret.
+$generator = new RandomBytesSecretGenerator(new PassThroughCodec());
+$secret    = $generator->generateSecret(30);
+
+// Generates a base32-encoded, 20 byte random secret.
+$mfa    = MultiFactorAuth::default('Test Issuer');
+$secret = $mfa->generateSecret();
 ```
 
 # Sandbox

@@ -124,7 +124,7 @@ $eventBasedCode = $mfa->generateEventBasedCode($_SESSION['secret'], $_SESSION['c
             <img src="<?= $timeBasedQr->dataUri() ?>" class="img-thumbnail d-block ml-auto mr-auto mb-3">
             <div class="row text-left">
                 <div class="col-4 d-flex align-items-center">Current code</div>
-                <div class="col"><code><?= $timeBasedCode->toString() ?></code></div>
+                <div class="col"><code><?= $timeBasedCode ?></code></div>
             </div>
             <form method="post" class="row text-left">
                 <div class="col d-flex align-items-center">Code</div>
@@ -137,7 +137,7 @@ $eventBasedCode = $mfa->generateEventBasedCode($_SESSION['secret'], $_SESSION['c
             <img src="<?= $eventBasedQr->dataUri() ?>" class="img-thumbnail d-block ml-auto mr-auto mb-3">
             <div class="row text-left">
                 <div class="col-4 d-flex align-items-center">Current code</div>
-                <div class="col"><code><?= $eventBasedCode->toString() ?></code></div>
+                <div class="col"><code><?= $eventBasedCode ?></code></div>
             </div>
             <form method="post" class="row text-left">
                 <div class="col d-flex align-items-center">Current counter</div>

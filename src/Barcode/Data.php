@@ -2,8 +2,6 @@
 
 namespace Krixon\MultiFactorAuth\Barcode;
 
-use Krixon\MultiFactorAuth\Code\Code;
-
 abstract class Data
 {
     private $secret;
@@ -16,7 +14,7 @@ abstract class Data
         string $secret,
         string $issuer,
         string $accountName,
-        int $digitCount = Code::DEFAULT_DIGIT_COUNT
+        int $digitCount = 6
     ) {
         $this->secret       = $secret;
         $this->digitCount   = $digitCount;

@@ -2,7 +2,6 @@
 
 namespace Krixon\MultiFactorAuthTests\Functional;
 
-use Krixon\MultiFactorAuth\Code\Code;
 use Krixon\MultiFactorAuth\Codec\Base32Codec;
 use Krixon\MultiFactorAuth\MultiFactorAuth;
 use Krixon\MultiFactorAuthTests\TestCase;
@@ -25,20 +24,18 @@ class SuccessfulMultiFactorAuthTest extends TestCase
         static::assertByteCountGreaterThanOrEqualTo($secretByteCount, $rawSecret);
 
         // Can we use the secret to generate valid time-based codes?
-        $code       = $mfa->generateTimeBasedCode($secret);
-        $codeString = $code->toString($codeLength);
+        $code = $mfa->generateTimeBasedCode($secret, null, $codeLength);
 
-        static::assertInstanceOf(Code::class, $code);
-        static::assertRegExp('/\d{' . $codeLength . '}/', $codeString);
-        static::assertTrue($mfa->verifyTimeBasedCode($secret, $codeString));
+        static::assertInternalType('string', $code);
+        static::assertRegExp('/\d{' . $codeLength . '}/', $code);
+        static::assertTrue($mfa->verifyTimeBasedCode($secret, $code));
 
         // Can we use the secret to generate valid event-based codes?
-        $counter    = 0;
-        $code       = $mfa->generateEventBasedCode($secret, $counter);
-        $codeString = $code->toString($codeLength);
+        $counter = 0;
+        $code    = $mfa->generateEventBasedCode($secret, $counter, $codeLength);
 
-        static::assertInstanceOf(Code::class, $code);
-        static::assertRegExp('/\d{' . $codeLength . '}/', $codeString);
-        static::assertTrue($mfa->verifyEventBasedCode($secret, $codeString, $counter));
+        static::assertInternalType('string', $code);
+        static::assertRegExp('/\d{' . $codeLength . '}/', $code);
+        static::assertTrue($mfa->verifyEventBasedCode($secret, $code, $counter));
     }
 }

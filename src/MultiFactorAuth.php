@@ -10,7 +10,6 @@ use Krixon\MultiFactorAuth\Barcode\GoogleQRGenerator;
 use Krixon\MultiFactorAuth\Barcode\Options;
 use Krixon\MultiFactorAuth\Barcode\TimeBasedData;
 use Krixon\MultiFactorAuth\Clock\Clock;
-use Krixon\MultiFactorAuth\Code\Code;
 use Krixon\MultiFactorAuth\Code\CodeGenerator;
 use Krixon\MultiFactorAuth\Code\CodeVerifier;
 use Krixon\MultiFactorAuth\Code\StandardCodeGenerator;
@@ -36,7 +35,7 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
         CodeGenerator $codeGenerator,
         CodeVerifier $eventBasedCodeVerifier,
         BarcodeGenerator $barcodeGenerator,
-        int $digitCount = Code::DEFAULT_DIGIT_COUNT
+        int $digitCount = 6
     ) {
         $this->issuer           = $issuer;
         $this->secretGenerator  = $secretGenerator;
@@ -88,15 +87,15 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
     }
 
 
-    public function generateTimeBasedCode(string $secret, int $time = null) : Code
+    public function generateTimeBasedCode(string $secret, int $time = null, int $codeLength = 6) : string
     {
-        return $this->codeGenerator->generateTimeBasedCode($secret, $time);
+        return $this->codeGenerator->generateTimeBasedCode($secret, $time, $codeLength);
     }
 
 
-    public function generateEventBasedCode(string $secret, int $counter) : Code
+    public function generateEventBasedCode(string $secret, int $counter, int $codeLength = 6) : string
     {
-        return $this->codeGenerator->generateEventBasedCode($secret, $counter);
+        return $this->codeGenerator->generateEventBasedCode($secret, $counter, $codeLength);
     }
 
 
@@ -113,15 +112,20 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
      * @param string $secret
      * @param int    $counter
      * @param int    $numCodes
+     * @param int    $codeLength
      *
-     * @return Code[]
+     * @return string[]
      */
-    public function generateEventBasedCodes(string $secret, int $counter, int $numCodes = 10) : array
-    {
+    public function generateEventBasedCodes(
+        string $secret,
+        int $counter,
+        int $numCodes = 10,
+        int $codeLength = 6
+    ) : array {
         $codes = [];
 
         while ($numCodes--) {
-            $codes[] = $this->generateEventBasedCode($secret, $counter++);
+            $codes[] = $this->generateEventBasedCode($secret, $counter++, $codeLength);
         }
 
         return $codes;
@@ -156,10 +160,11 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
      */
     public function synchronizeCounter(string $secret, string $code, int $counter, int $lookahead = 10) : int
     {
-        $candidates = $this->generateEventBasedCodes($secret, $counter, $lookahead + 1);
+        $codeLength = strlen($code);
+        $candidates = $this->generateEventBasedCodes($secret, $counter, $lookahead + 1, $codeLength);
 
         foreach ($candidates as $offset => $candidate) {
-            if ($candidate->equalsString($code)) {
+            if ($candidate === $code) {
                 return $counter + $offset;
             }
         }

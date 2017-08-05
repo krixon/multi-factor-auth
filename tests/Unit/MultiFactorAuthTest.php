@@ -29,20 +29,23 @@ class MultiFactorAuthTest extends TestCase
      *
      * @param array $expectedCodes
      * @param int   $initialCounter
-     * @param int   $length
+     * @param int   $codeLength
      */
-    public function testGeneratesExpectedEventBasedCodes(array $expectedCodes, int $initialCounter = 0, int $length = 6)
-    {
+    public function testGeneratesExpectedEventBasedCodes(
+        array $expectedCodes,
+        int $initialCounter = 0,
+        int $codeLength = 6
+    ) {
         $mfa      = MultiFactorAuth::default('Test Issuer');
         $secret   = static::$codec->encode('12345678901234567890');
         $numCodes = count($expectedCodes);
 
-        $actualCodes = $mfa->generateEventBasedCodes($secret, $initialCounter, $numCodes);
+        $actualCodes = $mfa->generateEventBasedCodes($secret, $initialCounter, $numCodes, $codeLength);
 
         static::assertCount($numCodes, $actualCodes);
 
         foreach ($expectedCodes as $i => $expectedCode) {
-            static::assertSame($expectedCode, $actualCodes[$i]->toString($length));
+            static::assertSame($expectedCode, $actualCodes[$i]);
         }
     }
 
@@ -81,24 +84,24 @@ class MultiFactorAuthTest extends TestCase
             // CODE  | COUNTER | LOOKAHEAD | EXPECTED
 
             // Counter is not out of sync.
-            ['755224', 0,        10,         0],
-            ['969429', 3,        10,         3],
-            ['755224', 0,         0,         0], // 0 lookahead still works since the counter is in sync.
+            ['755224', 0, 10, 0],
+            ['969429', 3, 10, 3],
+            ['755224', 0, 0, 0], // 0 lookahead still works since the counter is in sync.
 
             // Counter is out of sync.
             // Off by one.
-            ['287082', 0,        10,         1],
-            ['359152', 1,        10,         2],
-            ['969429', 2,        10,         3],
-            ['338314', 3,        10,         4],
-            ['254676', 4,        10,         5],
-            ['254676', 4,         1,         5],
+            ['287082', 0, 10, 1],
+            ['359152', 1, 10, 2],
+            ['969429', 2, 10, 3],
+            ['338314', 3, 10, 4],
+            ['254676', 4, 10, 5],
+            ['254676', 4, 1, 5],
             // Off by more than one.
-            ['287922', 0,        10,         6],
-            ['162583', 0,        10,         7],
-            ['399871', 0,        10,         8],
-            ['520489', 0,        10,         9],
-            ['520489', 0,         9,         9],
+            ['287922', 0, 10, 6],
+            ['162583', 0, 10, 7],
+            ['399871', 0, 10, 8],
+            ['520489', 0, 10, 9],
+            ['520489', 0, 9, 9],
         ];
     }
 
@@ -125,13 +128,13 @@ class MultiFactorAuthTest extends TestCase
     {
         return [
             // CODE  | COUNTER | LOOKAHEAD
-            ['287082', 0,         0],
-            ['359152', 1,         0],
-            ['969429', 2,         0],
-            ['338314', 3,         0],
-            ['254676', 4,         0],
-            ['254676', 0,         4],
-            ['520489', 0,         8],
+            ['287082', 0, 0],
+            ['359152', 1, 0],
+            ['969429', 2, 0],
+            ['338314', 3, 0],
+            ['254676', 4, 0],
+            ['254676', 0, 4],
+            ['520489', 0, 8],
         ];
     }
 }

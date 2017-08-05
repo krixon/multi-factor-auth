@@ -31,8 +31,7 @@ class StandardCodeVerifier implements CodeVerifier
     public function verifyEventBasedCode(string $secret, string $code, int $counter) : bool
     {
         $codeLength = strlen($code);
-        $codeObj    = $this->codeGenerator->generateEventBasedCode($secret, $counter);
-        $candidate  = $codeObj->toString($codeLength);
+        $candidate  = $this->codeGenerator->generateEventBasedCode($secret, $counter, $codeLength);
 
         return hash_equals($candidate, $code);
     }
@@ -45,8 +44,7 @@ class StandardCodeVerifier implements CodeVerifier
         $codeLength = strlen($code);
 
         foreach ($times as $time) {
-            $codeObj   = $this->codeGenerator->generateTimeBasedCode($secret, $time);
-            $candidate = $codeObj->toString($codeLength);
+            $candidate = $this->codeGenerator->generateTimeBasedCode($secret, $time, $codeLength);
             $result   |= hash_equals($candidate, $code);
         }
 

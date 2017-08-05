@@ -3,7 +3,6 @@
 namespace Krixon\MultiFactorAuth\Barcode;
 
 use Krixon\MultiFactorAuth\Clock\Clock;
-use Krixon\MultiFactorAuth\Code\Code;
 use Krixon\MultiFactorAuth\Hash\Algorithm;
 
 class TimeBasedData extends Data
@@ -16,7 +15,7 @@ class TimeBasedData extends Data
         string $secret,
         string $issuer,
         string $accountName,
-        int $digitCount = Code::DEFAULT_DIGIT_COUNT,
+        int $digitCount = 6,
         int $windowLength = Clock::DEFAULT_WINDOW_LENGTH,
         Algorithm $algorithm = null
     ) {

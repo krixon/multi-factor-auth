@@ -2,8 +2,6 @@
 
 namespace Krixon\MultiFactorAuth\Barcode;
 
-use Krixon\MultiFactorAuth\Code\Code;
-
 class EventBasedData extends Data
 {
     private $counter;
@@ -13,7 +11,7 @@ class EventBasedData extends Data
         string $secret,
         string $issuer,
         string $accountName,
-        int $digitCount = Code::DEFAULT_DIGIT_COUNT,
+        int $digitCount = 6,
         int $counter = 0
     ) {
         parent::__construct($secret, $issuer, $accountName, $digitCount);
