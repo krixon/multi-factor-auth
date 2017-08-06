@@ -2,6 +2,7 @@
 
 namespace Krixon\MultiFactorAuthTests\Constraint;
 
+use Krixon\MultiFactorAuth\CountsBytes;
 use PHPUnit\Framework\Constraint\Constraint;
 
 class ByteCountGreaterThanOrEqualTo extends Constraint

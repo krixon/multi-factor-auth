@@ -4,6 +4,7 @@ namespace Krixon\MultiFactorAuth\Code;
 
 use Krixon\MultiFactorAuth\Clock\ClockProvider;
 use Krixon\MultiFactorAuth\Hash\AlgorithmProvider;
+use Krixon\MultiFactorAuth\OCRA\OCRASuite;
 
 interface CodeGenerator extends AlgorithmProvider, ClockProvider
 {
@@ -36,4 +37,15 @@ interface CodeGenerator extends AlgorithmProvider, ClockProvider
      * @return string
      */
     public function generateTimeBasedCode(string $secret, int $time = null, int $codeLength = 6) : string;
+
+
+    /**
+     * Generates challenge-response codes which conform to RFC6287 (OCRA: OATH Challenge-Response Algorithm).
+     *
+     * @param string    $secret
+     * @param OCRASuite $suite
+     *
+     * @return string
+     */
+    public function generateOCRACode(string $secret, OCRASuite $suite) : string;
 }

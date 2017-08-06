@@ -1,6 +1,6 @@
 <?php
 
-namespace Krixon\MultiFactorAuthTests\Constraint;
+namespace Krixon\MultiFactorAuth;
 
 trait CountsBytes
 {

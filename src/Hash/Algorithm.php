@@ -27,6 +27,21 @@ final class Algorithm
     }
 
 
+    public static function fromString(string $string) : self
+    {
+        switch ($string) {
+            case self::SHA1:
+                return static::sha1();
+            case self::SHA256:
+                return static::sha256();
+            case self::SHA512:
+                return static::sha512();
+            default:
+                throw new Exception\UnsupportedAlgorithm($string);
+        }
+    }
+
+
     public static function sha1() : self
     {
         return new self(self::SHA1);
@@ -42,6 +57,12 @@ final class Algorithm
     public static function sha512() : self
     {
         return new self(self::SHA512);
+    }
+
+
+    public function is(string $algorithm) : bool
+    {
+        return $this->algorithm === strtoupper($algorithm);
     }
 
 
