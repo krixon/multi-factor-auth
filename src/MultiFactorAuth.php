@@ -33,14 +33,14 @@ class MultiFactorAuth implements CodeVerifier, CodeGenerator, SecretGenerator, B
         string $issuer,
         SecretGenerator $secretGenerator,
         CodeGenerator $codeGenerator,
-        CodeVerifier $eventBasedCodeVerifier,
+        CodeVerifier $codeVerifier,
         BarcodeGenerator $barcodeGenerator,
         int $digitCount = 6
     ) {
         $this->issuer           = $issuer;
         $this->secretGenerator  = $secretGenerator;
         $this->codeGenerator    = $codeGenerator;
-        $this->codeVerifier     = $eventBasedCodeVerifier;
+        $this->codeVerifier     = $codeVerifier;
         $this->barcodeGenerator = $barcodeGenerator;
         $this->digitCount       = $digitCount;
     }
