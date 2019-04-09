@@ -7,8 +7,8 @@ use Krixon\MultiFactorAuth\Clock\Clock;
 class StandardCodeVerifier implements CodeVerifier
 {
     private $maxWindowOffset;
-
     private $codeGenerator;
+    private $minCodeLength;
 
 
     /**
@@ -20,18 +20,27 @@ class StandardCodeVerifier implements CodeVerifier
      *
      * @param CodeGenerator $codeGenerator
      * @param int           $maxWindowOffset
+     * @param int           $minCodeLength   Enforces a minimum length on any supplied codes. This avoids weak
+     *                                       verification, for example by providing a 1-digit code which has a 1 in
+     *                                       10 chance of being verified successfully.
      */
-    public function __construct(CodeGenerator $codeGenerator, int $maxWindowOffset = 1)
+    public function __construct(CodeGenerator $codeGenerator, int $maxWindowOffset = 1, int $minCodeLength = 6)
     {
         $this->codeGenerator   = $codeGenerator;
         $this->maxWindowOffset = $maxWindowOffset;
+        $this->minCodeLength   = $minCodeLength;
     }
 
 
     public function verifyEventBasedCode(string $secret, string $code, int $counter) : bool
     {
         $codeLength = strlen($code);
-        $candidate  = $this->codeGenerator->generateEventBasedCode($secret, $counter, $codeLength);
+
+        if (!$this->isCodeLengthSatisfied($codeLength)) {
+            return false;
+        }
+
+        $candidate = $this->codeGenerator->generateEventBasedCode($secret, $counter, $codeLength);
 
         return hash_equals($candidate, $code);
     }
@@ -39,9 +48,14 @@ class StandardCodeVerifier implements CodeVerifier
 
     public function verifyTimeBasedCode(string $secret, string $code) : bool
     {
-        $result     = false;
-        $times      = $this->clock()->times(null, $this->maxWindowOffset);
         $codeLength = strlen($code);
+
+        if (!$this->isCodeLengthSatisfied($codeLength)) {
+            return false;
+        }
+
+        $result = false;
+        $times  = $this->clock()->times(null, $this->maxWindowOffset);
 
         foreach ($times as $time) {
             $candidate = $this->codeGenerator->generateTimeBasedCode($secret, $time, $codeLength);
@@ -55,5 +69,11 @@ class StandardCodeVerifier implements CodeVerifier
     protected function clock() : Clock
     {
         return $this->codeGenerator->clock();
+    }
+
+
+    private function isCodeLengthSatisfied(int $codeLength) : bool
+    {
+        return $codeLength >= $this->minCodeLength;
     }
 }
