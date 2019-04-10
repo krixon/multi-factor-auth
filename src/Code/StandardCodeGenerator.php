@@ -13,35 +13,48 @@ class StandardCodeGenerator implements CodeGenerator
     private $clock;
     private $algorithm;
     private $codec;
+    private $codeLength;
 
 
     /**
-     * @param Clock|null  $clock     A clock. If none is provides, the system clock will be used.
-     * @param Algorithm   $algorithm The hash algorithm used when generating time-based codes. This argument does not
-     *                               apply to event-based codes which always use SHA1 per RFC4226 (HOTP).
-     * @param Codec|null  $codec     The codec to use for decoding the secret. If none is specified, this defaults
-     *                               to base32 which is also the default codec used for secret generation. The
-     *                               PassThroughCodec can be passed if secrets are not encoded at all.
+     * @param Clock|null  $clock      A clock. If none is provides, the system clock will be used.
+     * @param Algorithm   $algorithm  The hash algorithm used when generating time-based codes. This argument does not
+     *                                apply to event-based codes which always use SHA1 per RFC4226 (HOTP).
+     * @param Codec|null  $codec      The codec to use for decoding the secret. If none is specified, this defaults
+     *                                to base32 which is also the default codec used for secret generation. The
+     *                                PassThroughCodec can be passed if secrets are not encoded at all.
+     * @param int         $codeLength The length of all generated codes.
      */
-    public function __construct(Clock $clock = null, Algorithm $algorithm = null, Codec $codec = null)
-    {
-        $this->clock     = $clock     ?: new SystemClock();
-        $this->algorithm = $algorithm ?: Algorithm::sha1();
-        $this->codec     = $codec     ?: new Base32Codec();
+    public function __construct(
+        Clock $clock = null,
+        Algorithm $algorithm = null,
+        Codec $codec = null,
+        int $codeLength = 6
+    ) {
+        $this->clock      = $clock     ?: new SystemClock();
+        $this->algorithm  = $algorithm ?: Algorithm::sha1();
+        $this->codec      = $codec     ?: new Base32Codec();
+        $this->codeLength = $codeLength;
     }
 
 
-    public function generateTimeBasedCode(string $secret, int $time = null, int $codeLength = 6) : string
+    public function setCodeLength(int $length) : void
+    {
+        $this->codeLength = $length;
+    }
+
+
+    public function generateTimeBasedCode(string $secret, int $time = null) : string
     {
         $window = $this->clock->window($time);
 
-        return $this->generateCode($secret, $window, $this->algorithm, $codeLength);
+        return $this->generateCode($secret, $window, $this->algorithm);
     }
 
 
-    public function generateEventBasedCode(string $secret, int $counter, int $codeLength = 6) : string
+    public function generateEventBasedCode(string $secret, int $counter) : string
     {
-        return $this->generateCode($secret, $counter, Algorithm::sha1(), $codeLength);
+        return $this->generateCode($secret, $counter, Algorithm::sha1());
     }
 
 
@@ -57,7 +70,7 @@ class StandardCodeGenerator implements CodeGenerator
     }
 
 
-    private function generateCode(string $secret, int $factor, Algorithm $algorithm, int $codeLength) : string
+    private function generateCode(string $secret, int $factor, Algorithm $algorithm) : string
     {
         $secret = $this->codec->decode($secret);
         $bytes  = "\0\0\0\0" . pack('N*', $factor);
@@ -71,6 +84,6 @@ class StandardCodeGenerator implements CodeGenerator
             ( ord($hash[$offset + 3]) & 0xFF)
         );
 
-        return substr($decimal, -$codeLength);
+        return substr($decimal, -$this->codeLength);
     }
 }

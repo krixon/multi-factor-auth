@@ -59,8 +59,8 @@ abstract class DataTest extends TestCase
         $digitCount = 8;
         $data       = $this->data();
 
-        static::assertNotSame($digitCount, $data->digitCount());
-        static::assertSame($digitCount, $data->withDigitCount($digitCount)->digitCount());
+        static::assertNotSame($digitCount, $data->codeLength());
+        static::assertSame($digitCount, $data->withCodeLength($digitCount)->codeLength());
     }
 
 

@@ -11,7 +11,7 @@ trait GeneratesKeyURIsFromData
         $parameters = [
             'secret'    => $data->secret(),
             'issuer'    => $data->issuer(),
-            'digits'    => $data->digitCount(),
+            'digits'    => $data->codeLength(),
         ];
 
         $type = 'totp';

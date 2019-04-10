@@ -15,11 +15,11 @@ class TimeBasedData extends Data
         string $secret,
         string $issuer,
         string $accountName,
-        int $digitCount = 6,
+        int $codeLength = 6,
         int $windowLength = Clock::DEFAULT_WINDOW_LENGTH,
         Algorithm $algorithm = null
     ) {
-        parent::__construct($secret, $issuer, $accountName, $digitCount);
+        parent::__construct($secret, $issuer, $accountName, $codeLength);
 
         $this->algorithm = $algorithm ?: Algorithm::sha1();
 
@@ -33,7 +33,7 @@ class TimeBasedData extends Data
     }
 
 
-    public function withWindowLength(int $windowLength)
+    public function withWindowLength(int $windowLength) : self
     {
         $instance = clone $this;
 
@@ -49,7 +49,7 @@ class TimeBasedData extends Data
     }
 
 
-    public function withAlgorithm(Algorithm $algorithm)
+    public function withAlgorithm(Algorithm $algorithm) : self
     {
         $instance = clone $this;
 

@@ -7,17 +7,17 @@ abstract class Data
     private $secret;
     private $accountName;
     private $issuer;
-    private $digitCount;
+    private $codeLength;
 
 
     public function __construct(
         string $secret,
         string $issuer,
         string $accountName,
-        int $digitCount = 6
+        int $codeLength = 6
     ) {
-        $this->secret       = $secret;
-        $this->digitCount   = $digitCount;
+        $this->secret     = $secret;
+        $this->codeLength = $codeLength;
 
         $this->setAccountName($accountName);
         $this->setIssuer($issuer);
@@ -30,7 +30,7 @@ abstract class Data
     }
 
 
-    public function withSecret(string $secret)
+    public function withSecret(string $secret) : self
     {
         $instance = clone $this;
 
@@ -46,7 +46,7 @@ abstract class Data
     }
 
 
-    public function withIssuer(string $issuer)
+    public function withIssuer(string $issuer) : self
     {
         $instance = clone $this;
 
@@ -62,7 +62,7 @@ abstract class Data
     }
 
 
-    public function withAccountName(string $accountName)
+    public function withAccountName(string $accountName) : self
     {
         $instance = clone $this;
 
@@ -72,17 +72,17 @@ abstract class Data
     }
 
 
-    public function digitCount() : int
+    public function codeLength() : int
     {
-        return $this->digitCount;
+        return $this->codeLength;
     }
 
 
-    public function withDigitCount(int $digitCount)
+    public function withCodeLength(int $codeLength) : self
     {
         $instance = clone $this;
 
-        $instance->digitCount = $digitCount;
+        $instance->codeLength = $codeLength;
 
         return $instance;
     }

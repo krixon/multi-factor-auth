@@ -11,10 +11,10 @@ class EventBasedData extends Data
         string $secret,
         string $issuer,
         string $accountName,
-        int $digitCount = 6,
+        int $codeLength = 6,
         int $counter = 0
     ) {
-        parent::__construct($secret, $issuer, $accountName, $digitCount);
+        parent::__construct($secret, $issuer, $accountName, $codeLength);
 
         $this->setCounter($counter);
     }
@@ -26,7 +26,7 @@ class EventBasedData extends Data
     }
 
 
-    public function withCounter(int $counter)
+    public function withCounter(int $counter) : self
     {
         $instance = clone $this;
 

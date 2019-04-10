@@ -8,17 +8,22 @@ use Krixon\MultiFactorAuth\Hash\AlgorithmProvider;
 interface CodeGenerator extends AlgorithmProvider, ClockProvider
 {
     /**
+     * Defines the length of generated codes.
+     */
+    public function setCodeLength(int $length) : void;
+
+
+    /**
      * Generates event-based codes which conform to RFC4226 (HOTP).
      *
      * An incrementing counter is used in order to generate codes.
      *
-     * @param string $secret     The shared secret.
-     * @param int    $counter    The current value of the counter.
-     * @param int    $codeLength
+     * @param string $secret  The shared secret.
+     * @param int    $counter The current value of the counter.
      *
      * @return string
      */
-    public function generateEventBasedCode(string $secret, int $counter, int $codeLength = 6) : string;
+    public function generateEventBasedCode(string $secret, int $counter) : string;
 
 
     /**
@@ -29,11 +34,10 @@ interface CodeGenerator extends AlgorithmProvider, ClockProvider
      * Unlike event-based codes which are restricted to SHA-1 by the spec, time-based codes can optionally use SHA-256
      * or SHA-512 to hash the secret.
      *
-     * @param string   $secret     The shared secret.
-     * @param int|null $time       The time for which to generate a code. If not supplied the current time will be used.
-     * @param int      $codeLength
+     * @param string   $secret The shared secret.
+     * @param int|null $time   The time for which to generate a code. If not supplied the current time will be used.
      *
      * @return string
      */
-    public function generateTimeBasedCode(string $secret, int $time = null, int $codeLength = 6) : string;
+    public function generateTimeBasedCode(string $secret, int $time = null) : string;
 }
