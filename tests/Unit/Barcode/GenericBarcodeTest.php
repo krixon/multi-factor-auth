@@ -7,7 +7,7 @@ use Krixon\MultiFactorAuthTests\TestCase;
 
 class GenericBarcodeTest extends TestCase
 {
-    public function testImageData()
+    public function testImageData() : void
     {
         $barcode = new GenericBarcode('abc123', 'image/jpeg');
 
@@ -15,7 +15,7 @@ class GenericBarcodeTest extends TestCase
     }
 
 
-    public function testMimeType()
+    public function testMimeType() : void
     {
         $barcode = new GenericBarcode('abc123', 'image/jpeg');
 
@@ -23,7 +23,7 @@ class GenericBarcodeTest extends TestCase
     }
 
 
-    public function testDataUri()
+    public function testDataUri() : void
     {
         $barcode = new GenericBarcode('abc123', 'image/jpeg');
 

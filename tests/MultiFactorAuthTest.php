@@ -11,6 +11,7 @@ use Krixon\MultiFactorAuth\Code\CodeGenerator;
 use Krixon\MultiFactorAuth\Code\CodeVerifier;
 use Krixon\MultiFactorAuth\MultiFactorAuth;
 use Krixon\MultiFactorAuth\Secret\SecretGenerator;
+use ReflectionException;
 
 class MultiFactorAuthTest extends TestCase
 {
@@ -20,7 +21,7 @@ class MultiFactorAuthTest extends TestCase
     private $mfa;
 
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -28,7 +29,10 @@ class MultiFactorAuthTest extends TestCase
     }
 
 
-    public function testUsesSetSecretGenerator()
+    /**
+     * @throws ReflectionException
+     */
+    public function testUsesSetSecretGenerator() : void
     {
         $generator = $this->createMock(SecretGenerator::class);
 
@@ -41,7 +45,10 @@ class MultiFactorAuthTest extends TestCase
     }
 
 
-    public function testUsesSetBarcodeGenerator()
+    /**
+     * @throws ReflectionException
+     */
+    public function testUsesSetBarcodeGenerator() : void
     {
         $data      = $this->createMock(Data::class);
         $generator = $this->createMock(BarcodeGenerator::class);
@@ -56,7 +63,10 @@ class MultiFactorAuthTest extends TestCase
     }
 
 
-    public function testUsesSetCodeGenerator()
+    /**
+     * @throws ReflectionException
+     */
+    public function testUsesSetCodeGenerator() : void
     {
         $secret    = 'secret';
         $generator = $this->createMock(CodeGenerator::class);
@@ -70,7 +80,10 @@ class MultiFactorAuthTest extends TestCase
     }
 
 
-    public function testUsesSetCodeVerifier()
+    /**
+     * @throws ReflectionException
+     */
+    public function testUsesSetCodeVerifier() : void
     {
         $secret    = 'secret';
         $code      = 'code';
@@ -85,7 +98,10 @@ class MultiFactorAuthTest extends TestCase
     }
 
 
-    public function testPassesCorrectDataToBarcodeGenerator()
+    /**
+     * @throws ReflectionException
+     */
+    public function testPassesCorrectDataToBarcodeGenerator() : void
     {
         $secret      = 'secret';
         $accountName = 'Account Name';
@@ -97,13 +113,13 @@ class MultiFactorAuthTest extends TestCase
             ->method('generateBarcode')
             ->withConsecutive(
                 [
-                    $this->callback(function ($subject) use ($issuer) {
+                    $this->callback(static function ($subject) use ($issuer) {
                         return $subject instanceof TimeBasedData && $subject->issuer() === $issuer;
                     }),
                     $this->isNull(),
                 ],
                 [
-                    $this->callback(function ($subject) use ($issuer) {
+                    $this->callback(static function ($subject) use ($issuer) {
                         return $subject instanceof EventBasedData && $subject->issuer() === $issuer;
                     }),
                     $this->isNull(),
@@ -118,7 +134,10 @@ class MultiFactorAuthTest extends TestCase
     }
 
 
-    public function testPassesOptionsThroughToBarcodeGenerator()
+    /**
+     * @throws ReflectionException
+     */
+    public function testPassesOptionsThroughToBarcodeGenerator() : void
     {
         $options   = Options::default();
         $generator = $this->createMock(BarcodeGenerator::class);

@@ -11,7 +11,7 @@ class CurlClientTest extends TestCase
     use PHPMock;
 
 
-    public function testThrowsExpectedExceptionWhenGenerationFails()
+    public function testThrowsExpectedExceptionWhenGenerationFails() : void
     {
         $expectedData = 'FooBar';
         $curlExec     = $this->getFunctionMock('Krixon\MultiFactorAuth\HTTP', 'curl_exec');

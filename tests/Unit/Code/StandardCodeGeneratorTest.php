@@ -2,6 +2,7 @@
 
 namespace Krixon\MultiFactorAuthTests\Unit\Code;
 
+use InvalidArgumentException;
 use Krixon\MultiFactorAuth\Clock\StoppedClock;
 use Krixon\MultiFactorAuth\Code\StandardCodeGenerator;
 use Krixon\MultiFactorAuth\Codec\Base32Codec;
@@ -16,7 +17,7 @@ class StandardCodeGeneratorTest extends TestCase
      * @param int    $counter
      * @param string $expected
      */
-    public function testGeneratesCorrectEventBasedCode(int $counter, string $expected)
+    public function testGeneratesCorrectEventBasedCode(int $counter, string $expected) : void
     {
         $codec     = new Base32Codec();
         $generator = new StandardCodeGenerator();
@@ -27,7 +28,7 @@ class StandardCodeGeneratorTest extends TestCase
     }
 
 
-    public function correctEventBasedCodeProvider()
+    public function correctEventBasedCodeProvider() : array
     {
         /**
          * Test values are taken from RFC4226 Appendix D (HOTP Algorithm: Test Values).
@@ -56,7 +57,7 @@ class StandardCodeGeneratorTest extends TestCase
      * @param string $algorithm
      * @param string $expected
      */
-    public function testGeneratesCorrectTimeBasedCode(int $time, string $algorithm, string $expected)
+    public function testGeneratesCorrectTimeBasedCode(int $time, string $algorithm, string $expected) : void
     {
         $codec     = new Base32Codec();
         $clock     = new StoppedClock($time);
@@ -73,7 +74,7 @@ class StandardCodeGeneratorTest extends TestCase
                 $secret = '1234567890123456789012345678901234567890123456789012345678901234';
                 break;
             default:
-                throw new \InvalidArgumentException("Unknown algorithm '$algorithm'.");
+                throw new InvalidArgumentException("Unknown algorithm '$algorithm'.");
         }
 
         $secret = $codec->encode($secret);
@@ -83,7 +84,7 @@ class StandardCodeGeneratorTest extends TestCase
     }
 
 
-    public function correctTimeBasedCodeProvider()
+    public function correctTimeBasedCodeProvider() : array
     {
         /**
          * Test values are taken from RFC6238 Appendix B (Test Vectors).

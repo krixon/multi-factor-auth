@@ -13,31 +13,29 @@ class ByteCountGreaterThanOrEqualTo extends Constraint
 
     public function __construct(int $byteCount)
     {
-        parent::__construct();
-
         $this->minByteCount = $byteCount;
     }
 
 
-    public function toString()
+    public function toString() : string
     {
-        return sprintf('is at least %s bytes', $this->exporter->export($this->minByteCount));
+        return sprintf('is at least %s bytes', $this->exporter()->export($this->minByteCount));
     }
 
 
-    protected function matches($other)
+    protected function matches($other) : bool
     {
         return $this->countBytes($other) >= $this->minByteCount;
     }
 
 
-    protected function failureDescription($other)
+    protected function failureDescription($other) : string
     {
         return sprintf(
             '%s is at least %s bytes (actual byte count: %s)',
-            $this->exporter->export(trim(chunk_split(bin2hex($other), 2, ' '))),
-            $this->exporter->export($this->minByteCount),
-            $this->exporter->export($this->countBytes($other))
+            $this->exporter()->export(trim(chunk_split(bin2hex($other), 2, ' '))),
+            $this->exporter()->export($this->minByteCount),
+            $this->exporter()->export($this->countBytes($other))
         );
     }
 }

@@ -9,7 +9,7 @@ use Krixon\MultiFactorAuth\Hash\Algorithm;
 
 class TimeBasedDataTest extends DataTest
 {
-    public function testWithWindowLength()
+    public function testWithWindowLength() : void
     {
         $windowLength = 42;
         $data         = $this->data();
@@ -19,7 +19,7 @@ class TimeBasedDataTest extends DataTest
     }
 
 
-    public function testWithAlgorithm()
+    public function testWithAlgorithm() : void
     {
         $algorithm = Algorithm::sha256();
         $data      = $this->data();
@@ -29,7 +29,7 @@ class TimeBasedDataTest extends DataTest
     }
 
 
-    public function testThrowsIfWindowLengthLessThanZero()
+    public function testThrowsIfWindowLengthLessThanZero() : void
     {
         $this->expectException(InvalidData::class);
 

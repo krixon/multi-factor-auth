@@ -2,6 +2,7 @@
 
 namespace Krixon\MultiFactorAuthTests\Unit\Secret;
 
+use Exception;
 use Krixon\MultiFactorAuth\Codec\PassThroughCodec;
 use Krixon\MultiFactorAuth\Secret\Exception\SecretGenerationFailed;
 use Krixon\MultiFactorAuth\Secret\RandomBytesSecretGenerator;
@@ -18,7 +19,7 @@ class RandomBytesSecretGeneratorTest extends TestCase
     private $generator;
 
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -26,7 +27,7 @@ class RandomBytesSecretGeneratorTest extends TestCase
     }
 
 
-    public function testGeneratesSecretsWithSpecifiedByteCount()
+    public function testGeneratesSecretsWithSpecifiedByteCount() : void
     {
         for ($i = 8; $i <= 256; $i += 8) {
             static::assertByteCount($i, $this->generator->generateSecret($i));
@@ -37,10 +38,10 @@ class RandomBytesSecretGeneratorTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    public function testThrowsExpectedExceptionWhenGenerationFails()
+    public function testThrowsExpectedExceptionWhenGenerationFails() : void
     {
         $randomBytes = $this->getFunctionMock('Krixon\MultiFactorAuth\Secret', 'random_bytes');
-        $randomBytes->expects($this->any())->willThrowException(new \Exception);
+        $randomBytes->expects($this->any())->willThrowException(new Exception);
 
         $this->expectException(SecretGenerationFailed::class);
 

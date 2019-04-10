@@ -8,6 +8,7 @@ use Krixon\MultiFactorAuth\Barcode\Options;
 use Krixon\MultiFactorAuth\Barcode\TimeBasedData;
 use Krixon\MultiFactorAuth\HTTP\Client;
 use Krixon\MultiFactorAuthTests\TestCase;
+use ReflectionException;
 
 class GoogleQRGeneratorTest extends TestCase
 {
@@ -18,13 +19,16 @@ class GoogleQRGeneratorTest extends TestCase
      * @param Options|null $options
      * @param array        $expected
      * @param Options|null $defaults
+     *
+     * @throws ReflectionException
      */
     public function testSendsCorrectRequest(
         Data $data,
         Options $options = null,
         array $expected = [],
         Options $defaults = null
-    ) {
+    ) : void {
+        /** @noinspection SpellCheckingInspection */
         $expected += [
             'size'   => '200x200',
             'ec'     => 'L',
@@ -35,7 +39,7 @@ class GoogleQRGeneratorTest extends TestCase
         ];
 
 
-        $expected = sprintf(
+        $expectedUri = sprintf(
             'https://chart.googleapis.com/chart?cht=qr&chs=%s&chld=%s|%d&chl=%s',
             $expected['size'],
             $expected['ec'],
@@ -48,7 +52,7 @@ class GoogleQRGeneratorTest extends TestCase
         $client
             ->expects($this->once())
             ->method('get')
-            ->with($expected)
+            ->with($expectedUri)
             ->willReturn(decbin('blob'));
 
         /** @noinspection PhpParamsInspection */
@@ -58,7 +62,7 @@ class GoogleQRGeneratorTest extends TestCase
     }
 
 
-    public function correctRequestProvider()
+    public function correctRequestProvider() : array
     {
         $timeData = new TimeBasedData('1234567890', 'Test Issuer', 'dave.lister@example.com');
         $options  = Options::default();

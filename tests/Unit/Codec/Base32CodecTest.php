@@ -15,7 +15,7 @@ class Base32CodecTest extends TestCase
      * @param string $expected
      * @param bool   $pad
      */
-    public function testEncodesCorrectly(string $input, string $expected, bool $pad = false)
+    public function testEncodesCorrectly(string $input, string $expected, bool $pad = false) : void
     {
         $output = (new Base32Codec($pad))->encode($input);
 
@@ -23,8 +23,9 @@ class Base32CodecTest extends TestCase
     }
 
 
-    public function correctEncodingProvider()
+    public function correctEncodingProvider() : array
     {
+        /** @noinspection SpellCheckingInspection */
         return [
             ['', ''],
             ['a', 'ME======', true],
@@ -59,7 +60,7 @@ class Base32CodecTest extends TestCase
      * @param string $input
      * @param string $expected
      */
-    public function testDecodesCorrectly(string $input, string $expected)
+    public function testDecodesCorrectly(string $input, string $expected) : void
     {
         $output = (new Base32Codec())->decode($input);
 
@@ -69,7 +70,7 @@ class Base32CodecTest extends TestCase
 
     public function correctDecodingProvider()
     {
-        return array_map(function (array $args) {
+        return array_map(static function (array $args) {
             if (count($args) === 3) {
                 array_pop($args);
             }
@@ -78,7 +79,7 @@ class Base32CodecTest extends TestCase
     }
 
 
-    public function testThrowsExpectedExceptionWhenDecodingInvalidBase32Data()
+    public function testThrowsExpectedExceptionWhenDecodingInvalidBase32Data() : void
     {
         $this->expectException(DecodingFailed::class);
 

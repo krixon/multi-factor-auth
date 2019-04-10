@@ -8,7 +8,7 @@ use Krixon\MultiFactorAuthTests\TestCase;
 
 abstract class DataTest extends TestCase
 {
-    public function testWithSecret()
+    public function testWithSecret() : void
     {
         $secret = 'bar';
         $data   = $this->data();
@@ -18,7 +18,7 @@ abstract class DataTest extends TestCase
     }
 
 
-    public function testWithIssuer()
+    public function testWithIssuer() : void
     {
         $issuer = 'Different Issuer';
         $data   = $this->data();
@@ -28,7 +28,7 @@ abstract class DataTest extends TestCase
     }
 
 
-    public function testThrowsIfIssuerContainsColon()
+    public function testThrowsIfIssuerContainsColon() : void
     {
         $this->expectException(InvalidData::class);
 
@@ -36,7 +36,7 @@ abstract class DataTest extends TestCase
     }
 
 
-    public function testThrowsIfAccountNameContainsColon()
+    public function testThrowsIfAccountNameContainsColon() : void
     {
         $this->expectException(InvalidData::class);
 
@@ -44,7 +44,7 @@ abstract class DataTest extends TestCase
     }
 
 
-    public function testWithAccountName()
+    public function testWithAccountName() : void
     {
         $accountName = 'Different Account Name';
         $data        = $this->data();
@@ -54,7 +54,7 @@ abstract class DataTest extends TestCase
     }
 
 
-    public function testWithDigitCount()
+    public function testWithDigitCount() : void
     {
         $digitCount = 8;
         $data       = $this->data();

@@ -7,7 +7,7 @@ use Krixon\MultiFactorAuthTests\TestCase;
 
 class PassThroughCodecTest extends TestCase
 {
-    public function testEncodesCorrectly()
+    public function testEncodesCorrectly() : void
     {
         $input  = 'abc123=!.';
         $output = (new PassThroughCodec())->encode($input);
@@ -16,7 +16,7 @@ class PassThroughCodecTest extends TestCase
     }
 
 
-    public function testDecodesCorrectly()
+    public function testDecodesCorrectly() : void
     {
         $input  = 'abc123=!.';
         $output = (new PassThroughCodec())->decode($input);

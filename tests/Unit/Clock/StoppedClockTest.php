@@ -23,7 +23,7 @@ class StoppedClockTest extends TestCase
         int $windowLength,
         int $epoch,
         array $expectedTimes
-    ) {
+    ) : void {
         $clock = new StoppedClock($time, $windowLength, $epoch);
         $times = $clock->times($time, $offset);
 
@@ -34,7 +34,7 @@ class StoppedClockTest extends TestCase
     }
 
 
-    public function correctTimesProvider()
+    public function correctTimesProvider() : array
     {
         return [
             [0,  0, 30, 0, [0]],
@@ -43,7 +43,7 @@ class StoppedClockTest extends TestCase
     }
 
 
-    public function testCannotBeConstructedWithWindowLengthLessThanZero()
+    public function testCannotBeConstructedWithWindowLengthLessThanZero() : void
     {
         $this->expectException(InvalidWindowLength::class);
 

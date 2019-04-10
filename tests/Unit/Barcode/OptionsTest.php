@@ -7,7 +7,7 @@ use Krixon\MultiFactorAuthTests\TestCase;
 
 class OptionsTest extends TestCase
 {
-    public function testWithForegroundColor()
+    public function testWithForegroundColor() : void
     {
         $options = new Options();
 
@@ -16,7 +16,7 @@ class OptionsTest extends TestCase
     }
 
 
-    public function testWithBackgroundColor()
+    public function testWithBackgroundColor() : void
     {
         $options = new Options();
 
@@ -25,7 +25,7 @@ class OptionsTest extends TestCase
     }
 
 
-    public function testWithWidth()
+    public function testWithWidth() : void
     {
         $options = new Options();
 
@@ -34,7 +34,7 @@ class OptionsTest extends TestCase
     }
 
 
-    public function testWithHeight()
+    public function testWithHeight() : void
     {
         $options = new Options();
 
@@ -43,7 +43,7 @@ class OptionsTest extends TestCase
     }
 
 
-    public function testWithSourceCharset()
+    public function testWithSourceCharset() : void
     {
         $options = new Options();
 
@@ -52,7 +52,7 @@ class OptionsTest extends TestCase
     }
 
 
-    public function testWithTargetCharset()
+    public function testWithTargetCharset() : void
     {
         $options = new Options();
 
@@ -61,7 +61,7 @@ class OptionsTest extends TestCase
     }
 
 
-    public function testWithErrorCorrectionLevel()
+    public function testWithErrorCorrectionLevel() : void
     {
         $options = new Options();
 
@@ -70,7 +70,7 @@ class OptionsTest extends TestCase
     }
 
 
-    public function testWithMargin()
+    public function testWithMargin() : void
     {
         $options = new Options();
 
@@ -79,7 +79,7 @@ class OptionsTest extends TestCase
     }
 
 
-    public function testWithFormat()
+    public function testWithFormat() : void
     {
         $options = new Options();
 
@@ -95,7 +95,7 @@ class OptionsTest extends TestCase
      * @param Options $rhs
      * @param Options $expected
      */
-    public function testUnion(Options $lhs, Options $rhs, Options $expected)
+    public function testUnion(Options $lhs, Options $rhs, Options $expected) : void
     {
         static::assertEquals($expected, $lhs->union($rhs));
     }
@@ -104,7 +104,7 @@ class OptionsTest extends TestCase
     /**
      *
      */
-    public function validUnionProvider()
+    public function validUnionProvider() : array
     {
         $base = new Options();
 
@@ -161,13 +161,13 @@ class OptionsTest extends TestCase
      * @param Options $rhs
      * @param bool    $expected
      */
-    public function testEquals(Options $lhs, Options $rhs, bool $expected)
+    public function testEquals(Options $lhs, Options $rhs, bool $expected) : void
     {
         static::assertEquals($expected, $lhs->equals($rhs));
     }
 
 
-    public function validEqualsProvider()
+    public function validEqualsProvider() : array
     {
         $base = new Options();
 

@@ -16,7 +16,7 @@ class MultiFactorAuthTest extends TestCase
     private static $codec;
 
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass() : void
     {
         parent::setUpBeforeClass();
 
@@ -35,7 +35,7 @@ class MultiFactorAuthTest extends TestCase
         array $expectedCodes,
         int $initialCounter = 0,
         int $codeLength = 6
-    ) {
+    ) : void {
         $mfa      = MultiFactorAuth::default('Test Issuer');
         $secret   = static::$codec->encode('12345678901234567890');
         $numCodes = count($expectedCodes);
@@ -50,7 +50,7 @@ class MultiFactorAuthTest extends TestCase
     }
 
 
-    public function validCodesProvider()
+    public function validCodesProvider() : array
     {
         return [
             [['755224', '287082', '359152', '969429', '338314'], 0],
@@ -67,7 +67,7 @@ class MultiFactorAuthTest extends TestCase
      * @param int    $lookahead
      * @param int    $expected
      */
-    public function testSynchronizesCounter(string $code, int $counter, int $lookahead, int $expected)
+    public function testSynchronizesCounter(string $code, int $counter, int $lookahead, int $expected) : void
     {
         $mfa    = MultiFactorAuth::default('Test Issuer');
         $secret = static::$codec->encode('12345678901234567890');
@@ -78,7 +78,7 @@ class MultiFactorAuthTest extends TestCase
     }
 
 
-    public function synchronizesCounterProvider()
+    public function synchronizesCounterProvider() : array
     {
         return [
             // CODE  | COUNTER | LOOKAHEAD | EXPECTED
@@ -113,9 +113,9 @@ class MultiFactorAuthTest extends TestCase
      * @param int    $counter
      * @param int    $lookahead
      */
-    public function testCannotSynchronizeCounterWhenLookaheadTooSmall(string $code, int $counter, int $lookahead)
+    public function testCannotSynchronizeCounterWhenLookaheadTooSmall(string $code, int $counter, int $lookahead) : void
     {
-        static::expectException(CounterSynchronizationFailed::class);
+        $this->expectException(CounterSynchronizationFailed::class);
 
         $mfa    = MultiFactorAuth::default('Test Issuer');
         $secret = static::$codec->encode('12345678901234567890');
@@ -124,7 +124,7 @@ class MultiFactorAuthTest extends TestCase
     }
 
 
-    public function cannotSynchronizeCounterWhenLookaheadTooSmallProvider()
+    public function cannotSynchronizeCounterWhenLookaheadTooSmallProvider() : array
     {
         return [
             // CODE  | COUNTER | LOOKAHEAD

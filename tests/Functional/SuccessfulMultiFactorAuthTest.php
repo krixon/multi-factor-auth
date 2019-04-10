@@ -8,33 +8,30 @@ use Krixon\MultiFactorAuthTests\TestCase;
 
 class SuccessfulMultiFactorAuthTest extends TestCase
 {
-    public function testDefaultMultiFactorAuthConfiguration()
+    public function testDefaultMultiFactorAuthConfiguration() : void
     {
         $this->runTests(MultiFactorAuth::default('Test Issuer'));
     }
 
 
-    private function runTests(MultiFactorAuth $mfa, $secretByteCount = 20, $codeLength = 6)
+    private function runTests(MultiFactorAuth $mfa, $secretByteCount = 20, $codeLength = 6) : void
     {
         // Can we generate a valid, 20B (160b) secret?
         $secret    = $mfa->generateSecret();
         $rawSecret = (new Base32Codec())->decode($secret);
 
-        static::assertInternalType('string', $secret);
         static::assertByteCountGreaterThanOrEqualTo($secretByteCount, $rawSecret);
 
         // Can we use the secret to generate valid time-based codes?
-        $code = $mfa->generateTimeBasedCode($secret, null, $codeLength);
+        $code = $mfa->generateTimeBasedCode($secret);
 
-        static::assertInternalType('string', $code);
         static::assertRegExp('/\d{' . $codeLength . '}/', $code);
         static::assertTrue($mfa->verifyTimeBasedCode($secret, $code));
 
         // Can we use the secret to generate valid event-based codes?
         $counter = 0;
-        $code    = $mfa->generateEventBasedCode($secret, $counter, $codeLength);
+        $code    = $mfa->generateEventBasedCode($secret, $counter);
 
-        static::assertInternalType('string', $code);
         static::assertRegExp('/\d{' . $codeLength . '}/', $code);
         static::assertTrue($mfa->verifyEventBasedCode($secret, $code, $counter));
     }

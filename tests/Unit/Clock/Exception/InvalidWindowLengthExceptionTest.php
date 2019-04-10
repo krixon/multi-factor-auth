@@ -7,7 +7,7 @@ use Krixon\MultiFactorAuthTests\TestCase;
 
 class InvalidWindowLengthExceptionTest extends TestCase
 {
-    public function testMessageIncludesInvalidWindowLength()
+    public function testMessageIncludesInvalidWindowLength() : void
     {
         $e = new InvalidWindowLength(12345);
 

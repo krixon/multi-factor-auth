@@ -2,10 +2,13 @@
 
 namespace Krixon\MultiFactorAuthTests\Unit\Code;
 
+use Generator;
 use Krixon\MultiFactorAuth\Clock\StoppedClock;
 use Krixon\MultiFactorAuth\Code\CodeGenerator;
 use Krixon\MultiFactorAuth\Code\StandardCodeVerifier;
 use Krixon\MultiFactorAuthTests\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionException;
 
 class StandardCodeVerifierTest extends TestCase
 {
@@ -13,9 +16,12 @@ class StandardCodeVerifierTest extends TestCase
      * @dataProvider minimumCodeLengthNotSatisfiedProvider
      *
      * @param int $minimum
+     *
+     * @throws ReflectionException
      */
     public function testFailsIfMinimumCodeLengthNotSatisfied(int $minimum, string $code) : void
     {
+        /** @var MockObject|CodeGenerator $generator */
         $generator = $this->createMock(CodeGenerator::class);
         $clock     = new StoppedClock(86400);
 
@@ -29,7 +35,7 @@ class StandardCodeVerifierTest extends TestCase
     }
 
 
-    public function minimumCodeLengthNotSatisfiedProvider() : \Generator
+    public function minimumCodeLengthNotSatisfiedProvider() : Generator
     {
         foreach (range(1, 10) as $minimum) {
             yield [$minimum, str_repeat(1, $minimum - 1)];

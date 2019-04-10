@@ -8,7 +8,7 @@ use Krixon\MultiFactorAuth\Barcode\Exception\InvalidData;
 
 class EventBasedDataTest extends DataTest
 {
-    public function testWithCounter()
+    public function testWithCounter() : void
     {
         $counter = 42;
         $data    = $this->data();
@@ -18,7 +18,7 @@ class EventBasedDataTest extends DataTest
     }
 
 
-    public function testThrowsIfCounterLessThanZero()
+    public function testThrowsIfCounterLessThanZero() : void
     {
         $this->expectException(InvalidData::class);
 

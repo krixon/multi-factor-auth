@@ -9,6 +9,7 @@ use Krixon\MultiFactorAuth\Barcode\GeneratesKeyURIsFromData;
 use Krixon\MultiFactorAuth\Barcode\TimeBasedData;
 use Krixon\MultiFactorAuth\Hash\Algorithm;
 use Krixon\MultiFactorAuthTests\TestCase;
+use ReflectionException;
 
 class GeneratesKeyUrisFromDataTest extends TestCase
 {
@@ -18,7 +19,7 @@ class GeneratesKeyUrisFromDataTest extends TestCase
      * @param Data   $data
      * @param string $expected
      */
-    public function testGeneratesExpectedKeyUri(Data $data, string $expected)
+    public function testGeneratesExpectedKeyUri(Data $data, string $expected) : void
     {
         $uri = $this->impl()->generateKeyURI($data);
 
@@ -26,11 +27,12 @@ class GeneratesKeyUrisFromDataTest extends TestCase
     }
 
 
-    public function expectedUriProvider()
+    public function expectedUriProvider() : array
     {
         $timeData  = new TimeBasedData('1234567890', 'Test Issuer', 'dave.lister@example.com');
         $eventData = new EventBasedData('1234567890', 'Test Issuer', 'dave.lister@example.com');
 
+        /** @noinspection SpellCheckingInspection */
         return [
             // Account name variations.
             [
@@ -85,7 +87,10 @@ class GeneratesKeyUrisFromDataTest extends TestCase
     }
 
 
-    public function testThrowsOnUnknownDataType()
+    /**
+     * @throws ReflectionException
+     */
+    public function testThrowsOnUnknownDataType() : void
     {
         $this->expectException(InvalidData::class);
 

@@ -8,7 +8,7 @@ use Krixon\MultiFactorAuthTests\TestCase;
 
 class AlgorithmTest extends TestCase
 {
-    public function testStaticFactoriesConstructExpectedInstances()
+    public function testStaticFactoriesConstructExpectedInstances() : void
     {
         static::assertSame(Algorithm::SHA1, (string)Algorithm::sha1());
         static::assertSame(Algorithm::SHA256, (string)Algorithm::sha256());
@@ -16,7 +16,7 @@ class AlgorithmTest extends TestCase
     }
 
 
-    public function testThrowsExpectedExceptionOnUnsupportedAlgorithm()
+    public function testThrowsExpectedExceptionOnUnsupportedAlgorithm() : void
     {
         $this->expectException(UnsupportedAlgorithm::class);
 
