@@ -4,7 +4,7 @@ namespace Krixon\MultiFactorAuth\Barcode;
 
 trait GeneratesKeyURIsFromData
 {
-    protected function generateKeyURI(Data $data) : string
+    protected function generateKeyURI(Data $data, bool $urlEncode = true) : string
     {
         $this->assertKnownDataType($data);
 
@@ -31,6 +31,10 @@ trait GeneratesKeyURIsFromData
 
         $queryString = http_build_query($parameters, '', '&', PHP_QUERY_RFC3986);
         $data        = sprintf('otpauth://%s/%s?%s', $type, $this->label($data), $queryString);
+
+        if (!$urlEncode) {
+            return $data;
+        }
 
         return rawurlencode($data);
     }
